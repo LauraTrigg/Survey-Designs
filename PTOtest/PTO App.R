@@ -2,15 +2,22 @@ library(shiny)
 
 ui <- fluidPage(
   titlePanel("Person Trade-Off Exercise"),
-  
+  div(style = "text-align: center; font-size: 18px; margin-bottom: 20px;", 
+      p("All patients are aged 20 and are in perfect health. Please use the sliding scale to select 
+how many people should receive 10 years for Programme B to be equally valuable as 
+Programme A.")),
   mainPanel(
     plotOutput('plot', height = "600px"),
-    
+ 
     div(style = "display: flex; justify-content: space-between; width: 90%;",
-        div(style = "margin-left: calc(15% + 10px); width: 300px; height: 300px; display: grid; justify-content: center; align-items: center; border: 2px solid white; background-color: white;",
+        div(style = "margin-left: calc(15% + 10px); width: 350px; height: 350px; 
+            display: grid; justify-content: center; align-items: center; 
+            border: 1px solid black; background-color: white;",
             uiOutput("stickmen_display_A")),
         
-        div(style = "width: 350px; height: 350px; display: grid; justify-content: center; align-items: center; border: 2px solid white; background-color: white;",
+        div(style = "width: 350px; height: 350px; display: 
+            grid; justify-content: center; align-items: center; 
+            border: 1px solid black; background-color: white;",
             uiOutput("stickmen_display_B"))
     ),
     
