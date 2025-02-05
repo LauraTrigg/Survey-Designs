@@ -1,3 +1,11 @@
+#setting up the variables 
+
+optionA <- list (
+  gains = c(1,2,5,20,50),
+  people = c(100,50,20,5,2)
+)
+
+
 library(shiny)
 
 ui <- fluidPage(
@@ -22,7 +30,8 @@ Programme A.")),
     ),
     
     sliderInput("no_people", "Number of People Benefiting from Option B", min = 1, max = 100, value = 1, width = "100%"),
-    actionButton("submit", "Submit")
+    actionButton("submit", "Submit"),
+
   )
 )
 
@@ -30,7 +39,7 @@ server <- function(input, output) {
   
   #Render the bar chart
   output$plot <- renderPlot({
-    barplot(c(2, 10), names.arg = c("Option A", "Option B"), col = "blue", ylim = c(0, 11), border = NA)
+    barplot(c(optionA$gains[[1]], 10), names.arg = c("Option A", "Option B"), col = "blue", ylim = c(0, 11), border = NA)
     title("Gains Per Person", col.main = "gray")
     axis(2, col.axis = "white")
     box(col = "white")
@@ -40,7 +49,7 @@ server <- function(input, output) {
   output$stickmen_display_A <- renderUI({
     box_width <- 300
     box_height <- 300
-    Option_A_gains_pp <- 25
+    Option_A_gains_pp <- optionA$people[[1]] #need to write a function to cycle through the list? How will this work with having two blocks of questions?
     cols <- ceiling(sqrt(Option_A_gains_pp))
     rows <- ceiling(Option_A_gains_pp / cols)
     stickman_width <- box_width / cols * 0.9
