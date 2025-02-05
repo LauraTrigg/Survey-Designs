@@ -8,7 +8,7 @@ how many people should receive 10 years for Programme B to be equally valuable a
 Programme A.")),
   mainPanel(
     plotOutput('plot', height = "600px"),
- 
+    
     div(style = "display: flex; justify-content: space-between; width: 90%;",
         div(style = "margin-left: calc(15% + 10px); width: 350px; height: 350px; 
             display: grid; justify-content: center; align-items: center; 
@@ -103,7 +103,7 @@ server <- function(input, output) {
     showNotification("You have confirmed your response!", type = "message")
     # You can add additional logic here, such as moving to the next question
   })
- 
+  
   # Action when "No, Go Back" is clicked
   observeEvent(input$no_go_back, {
     removeModal()  
@@ -112,10 +112,3 @@ server <- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)
-.
-.
-.
-.
-
-
-.
