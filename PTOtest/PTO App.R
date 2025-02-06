@@ -1,42 +1,106 @@
 #setting up the variables 
 
 optionA <- list (
-  gains = c(1,2,5,20,50),
-  people = c(100,50,20,5,2)
+  gains = c(1,2,5,20,50,
+            1,2,5,20,50,
+            1,2,5,20,50,
+            1,2,5,20,50,
+            1,2,5,20,50),
+  people = c(100,50,20,5,2,
+             100,50,20,5,2,
+             100,50,20,5,2,
+             100,50,20,5,2,
+             100,50,20,5,2)
 )
+
+healthstate <- list ("This is a description of a 0.2 health state", #0.2 health state 
+                     "This is a description of a 0.2 health state",
+                     "This is a description of a 0.2 health state",
+                     "This is a description of a 0.2 health state",
+                     "This is a description of a 0.2 health state",
+                     "This is a description of a 0.4 health state", #0.4 health state
+                     "This is a description of a 0.4 health state", 
+                     "This is a description of a 0.4 health state", 
+                     "This is a description of a 0.4 health state", 
+                     "This is a description of a 0.4 health state", 
+                     "This is a description of a 0.6 health state", #0.6 health state
+                     "This is a description of a 0.6 health state",
+                     "This is a description of a 0.6 health state",
+                     "This is a description of a 0.6 health state",
+                     "This is a description of a 0.6 health state",
+                     "This is a description of a 0.8 health state", #0.8 health state
+                     "This is a description of a 0.8 health state",
+                     "This is a description of a 0.8 health state",
+                     "This is a description of a 0.8 health state",
+                     "This is a description of a 0.8 health state",
+                     "This is a description of a 1 health state", #1 health state 
+                     "This is a description of a 1 health state",
+                     "This is a description of a 1 health state",
+                     "This is a description of a 1 health state",
+                     "This is a description of a 1 health state"
+                     )
 
 
 library(shiny)
 
+# UI
 ui <- fluidPage(
   
-  uiOutput("page_number"), #Dynamic UI to allow for multiple questions
+  # Centered Title Panel
+  titlePanel(div("Person Trade-Off Exercise", style = "text-align: center; font-weight: bold; font-size: 26px;")),
   
-  titlePanel("Person Trade-Off Exercise"),
-  div(style = "text-align: center; font-size: 18px; margin-bottom: 20px;", 
-      p("All patients are aged 20 and are in perfect health. Please use the sliding scale to select 
-how many people should receive 10 years for Programme B to be equally valuable as 
-Programme A.")),
-  mainPanel(
-    plotOutput('plot', height = "600px"),
-    
-    div(style = "display: flex; justify-content: space-between; width: 90%;",
-        div(style = "margin-left: calc(15% + 10px); width: 350px; height: 350px; 
-            display: grid; justify-content: center; align-items: center; 
-            border: 1px solid black; background-color: white;",
-            uiOutput("stickmen_display_A")),
-        
-        div(style = "width: 350px; height: 350px; display: 
-            grid; justify-content: center; align-items: center; 
-            border: 1px solid black; background-color: white;",
-            uiOutput("stickmen_display_B"))
-    ),
-    
-    sliderInput("no_people", "Number of People Benefiting from Option B", min = 1, max = 100, value = 1, width = "100%"),
-    actionButton("submit", "Submit"),
-
-  )
+  # Page Number Display
+  div(style = "text-align: center; font-size: 18px; font-weight: bold; margin-top: 10px;",
+      uiOutput("page_number")),
+  
+  # Instruction Section
+  div(style = "text-align: center; font-size: 18px; margin-bottom: 20px; padding: 10px; background-color: #f8f9fa; border-radius: 8px;", 
+      p("All patients are aged 20. Please use the sliding scale to select 
+         how many people should receive 10 years for Programme B to be equally valuable as 
+         Programme A.")),  
+  
+  # Health State Display
+  div(style = "text-align: center; font-size: 18px; font-weight: bold; background-color: #eef7ff; 
+               padding: 10px; margin-bottom: 20px; border-radius: 8px; width: 50%; margin-left: auto; margin-right: auto;",
+      uiOutput("healthstate_text")),  
+  
+  # Bar Chart Section
+  div(style = "display: flex; justify-content: center; margin-bottom: 20px;",
+      plotOutput('plot', height = "400px", width = "70%")),
+  
+  # Side-by-side Option A and B Descriptions
+  div(style = "display: flex; justify-content: center; gap: 40px; margin-bottom: 20px;",
+      div(style = "width: 45%; text-align: center; font-size: 16px; background-color: peachpuff; 
+                   padding: 15px; border-radius: 8px; border: 1px solid black;", 
+          strong("Option A"), br(), 
+          uiOutput("discription_of_option_A")),
+      div(style = "width: 45%; text-align: center; font-size: 16px; background-color: darkseagreen; 
+                   padding: 15px; border-radius: 8px; border: 1px solid black;", 
+          strong("Option B"), br(), 
+          uiOutput ("discription_of_option_B"))
+  ),
+  
+  # Stickmen Display Section
+  div(style = "display: flex; justify-content: center; gap: 40px; margin-bottom: 20px;",
+      div(style = "width: 350px; height: 350px; display: flex; align-items: center; justify-content: center; 
+                   border: 1px solid black; background-color: white; padding: 10px; border-radius: 8px;",
+          uiOutput("stickmen_display_A")),
+      
+      div(style = "width: 350px; height: 350px; display: flex; align-items: center; justify-content: center; 
+                   border: 1px solid black; background-color: white; padding: 10px; border-radius: 8px;",
+          uiOutput("stickmen_display_B"))
+  ),
+  
+  # Slider Input
+  div(style = "text-align: center; margin-bottom: 20px;",
+      sliderInput("no_people", "Number of People Benefiting from Option B", min = 1, max = 100, value = 1, width = "100%")),
+  
+  # Submit Button
+  div(style = "text-align: center;",
+      actionButton("submit", "Submit", class = "btn btn-primary btn-lg", 
+                   style = "padding: 12px 30px; font-size: 18px;"))
 )
+
 
 server <- function(input, output, session) {
   
@@ -46,19 +110,40 @@ server <- function(input, output, session) {
         paste("Question", page()))
   })
   
+  #Text for the health state
+  output$healthstate_text <- renderUI({
+    div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
+        paste("Health State: ", healthstate[[page()]]))
+  })
+
+  
   #Render the bar chart
   output$plot <- renderPlot({
-    barplot(c(optionA$gains[[page()]], 10), names.arg = c("Option A", "Option B"), col = "blue", ylim = c(0, 11), border = NA)
-    title("Gains Per Person", col.main = "gray")
-    axis(2, col.axis = "white")
+    barplot(c(optionA$gains[[page()]], 10), names.arg = c("Option A", "Option B"), 
+            col = c("peachpuff","darkseagreen"), ylim = c(0, 11), border = NA)
+    title("Gains Per Person", 
+          ylab = "Years Gained",
+          col.main = "black")
+    axis(2, col.axis = "black")
     box(col = "white")
   })
+  
+  #Text for under the bar charts 
+  output$discription_of_option_A <- renderUI({
+    div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
+        paste(optionA$people[[page()]], "people will gain", optionA$gains[[page()]], "years of life each"))
+  })
+  output$discription_of_option_B <- renderUI({
+    div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
+        paste(input$no_people, "people will gain 10 years of life each"))
+  })
+  
   
   #Render the stickmen for option A
   output$stickmen_display_A <- renderUI({
     box_width <- 300
     box_height <- 300
-    Option_A_gains_pp <- optionA$people[[page()]] #need to write a function to cycle through the list? How will this work with having two blocks of questions?
+    Option_A_gains_pp <- optionA$people[[page()]]
     cols <- ceiling(sqrt(Option_A_gains_pp))
     rows <- ceiling(Option_A_gains_pp / cols)
     stickman_width <- box_width / cols * 0.9
