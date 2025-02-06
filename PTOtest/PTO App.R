@@ -38,7 +38,7 @@ Programme A.")),
   )
 )
 
-server <- function(input, output) {
+server <- function(input, output, session) {
   
   page <- reactiveVal(1)
   output$page_number <- renderUI({
@@ -48,7 +48,7 @@ server <- function(input, output) {
   
   #Render the bar chart
   output$plot <- renderPlot({
-    barplot(c(optionA$gains[[1]], 10), names.arg = c("Option A", "Option B"), col = "blue", ylim = c(0, 11), border = NA)
+    barplot(c(optionA$gains[[page()]], 10), names.arg = c("Option A", "Option B"), col = "blue", ylim = c(0, 11), border = NA)
     title("Gains Per Person", col.main = "gray")
     axis(2, col.axis = "white")
     box(col = "white")
@@ -58,7 +58,7 @@ server <- function(input, output) {
   output$stickmen_display_A <- renderUI({
     box_width <- 300
     box_height <- 300
-    Option_A_gains_pp <- optionA$people[[1]] #need to write a function to cycle through the list? How will this work with having two blocks of questions?
+    Option_A_gains_pp <- optionA$people[[page()]] #need to write a function to cycle through the list? How will this work with having two blocks of questions?
     cols <- ceiling(sqrt(Option_A_gains_pp))
     rows <- ceiling(Option_A_gains_pp / cols)
     stickman_width <- box_width / cols * 0.9
@@ -121,6 +121,7 @@ server <- function(input, output) {
       page(page() + 1)  # Increment page number
       removeModal()  # Close the modal dialog
       showNotification("You have confirmed your response")
+      updateSliderInput(session, "no_people", value = 1)  # Reset the slider
     } else {
       showModal(modalDialog(
         title = "Survey Complete!",
