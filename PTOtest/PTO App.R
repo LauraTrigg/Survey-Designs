@@ -9,6 +9,9 @@ optionA <- list (
 library(shiny)
 
 ui <- fluidPage(
+  
+  uiOutput("page_number"), #Dynamic UI to allow for multiple questions
+  
   titlePanel("Person Trade-Off Exercise"),
   div(style = "text-align: center; font-size: 18px; margin-bottom: 20px;", 
       p("All patients are aged 20 and are in perfect health. Please use the sliding scale to select 
@@ -36,6 +39,12 @@ Programme A.")),
 )
 
 server <- function(input, output) {
+  
+  page <- reactiveVal(1)
+  output$page_number <- renderUI({
+    div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
+        paste("Question", page()))
+  })
   
   #Render the bar chart
   output$plot <- renderPlot({
@@ -108,9 +117,17 @@ server <- function(input, output) {
   
   # Action when "Yes, Continue" is clicked
   observeEvent(input$yes_continue, {
-    removeModal()  # Close the modal
-    showNotification("You have confirmed your response!", type = "message")
-    # You can add additional logic here, such as moving to the next question
+    if (page() < length(optionA$gains)) {
+      page(page() + 1)  # Increment page number
+      removeModal()  # Close the modal dialog
+      showNotification("You have confirmed your response")
+    } else {
+      showModal(modalDialog(
+        title = "Survey Complete!",
+        "Thank you for participating. Your responses have been recorded.",
+        easyClose = TRUE
+      ))
+    }
   })
   
   # Action when "No, Go Back" is clicked
