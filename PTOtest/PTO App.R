@@ -18,21 +18,35 @@ healthstate <- list ("This is a description of a 0.2 health state", #0.2 health 
                      "This is a description of a 0.2 health state",
                      "This is a description of a 0.2 health state",
                      "This is a description of a 0.2 health state",
+                     
                      "This is a description of a 0.4 health state", #0.4 health state
                      "This is a description of a 0.4 health state", 
                      "This is a description of a 0.4 health state", 
                      "This is a description of a 0.4 health state", 
                      "This is a description of a 0.4 health state", 
-                     "This is a description of a 0.6 health state", #0.6 health state
-                     "This is a description of a 0.6 health state",
-                     "This is a description of a 0.6 health state",
-                     "This is a description of a 0.6 health state",
-                     "This is a description of a 0.6 health state",
+                     
+                     "They have no problems walking about, with self-care or performinig usual activities. 
+                     They have extreme pain or discomfort. 
+                     They are moderately anxious or depressed", #0.601 health state
+                     "They have no problems walking about, with self-care or performinig usual activities. 
+                     They have extreme pain or discomfort. 
+                     They are moderately anxious or depressed",
+                     "They have no problems walking about, with self-care or performinig usual activities. 
+                     They have extreme pain or discomfort. 
+                     They are moderately anxious or depressed",
+                     "They have no problems walking about, with self-care or performinig usual activities. 
+                     They have extreme pain or discomfort. 
+                     They are moderately anxious or depressed",
+                     "They have no problems walking about, with self-care or performinig usual activities. 
+                     They have extreme pain or discomfort. 
+                     They are moderately anxious or depressed",
+                     
                      "This is a description of a 0.8 health state", #0.8 health state
                      "This is a description of a 0.8 health state",
                      "This is a description of a 0.8 health state",
                      "This is a description of a 0.8 health state",
                      "This is a description of a 0.8 health state",
+                     
                      "This is a description of a 1 health state", #1 health state 
                      "This is a description of a 1 health state",
                      "This is a description of a 1 health state",
@@ -47,6 +61,7 @@ library(shiny)
 ui <- fluidPage(
   
   # Custom CSS for responsiveness
+  {
   tags$head(tags$style(HTML("
     /* Center everything */
     .container {
@@ -125,7 +140,8 @@ ui <- fluidPage(
         height: 200px;
       }
     }
-  "))),
+  ")))},
+
   
   # Centered Title Panel
   titlePanel(div("Person Trade-Off Exercise", class = "content-section", style = "text-align: center; font-weight: bold; font-size: 26px;")),
@@ -160,14 +176,14 @@ ui <- fluidPage(
   ),
   
   # Stickmen Display Section
-  div(class = "stickmen-container",
+  div(class = "stickmen-container", style = "margin-bottom: 30px;gap: 100px;",
       div(class = "stickmen-box", uiOutput("stickmen_display_A")),
       div(class = "stickmen-box", uiOutput("stickmen_display_B"))
   ),
   
   # Slider Input
   div(class = "content-section", style = "text-align: center; margin-bottom: 30px;",
-      sliderInput("no_people", "Number of People Benefiting from Option B", min = 1, max = 100, value = 1, width = "80%")),
+      sliderInput("no_people", "Number of People Benefiting from Option B", min = 1, max = 100, value = 1, width = "100%")),
   
   # Submit Button
   div(class = "content-section", style = "text-align: center;",
@@ -187,7 +203,7 @@ server <- function(input, output, session) {
   #Text for the health state
   output$healthstate_text <- renderUI({
     div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
-        paste("Health State: ", healthstate[[page()]]))
+        paste("All of the patients have the following health conditions: ", healthstate[[page()]]))
   })
   
   
@@ -204,11 +220,14 @@ server <- function(input, output, session) {
   
   #Text for under the bar charts 
   output$discription_of_option_A <- renderUI({
-    div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
+    div(style = "text-align: center; font-size: 16px; margin-top: 10px;",
         paste(optionA$people[[page()]], "people will gain", optionA$gains[[page()]], "years of life each"))
   })
   output$discription_of_option_B <- renderUI({
-    div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
+    div(style = "text-align: center; font-size: 16px;  margin-top: 10px;",
+        if (input$no_people == 1) {
+          paste(input$no_people, "person will gain 10 years of life")
+        } else
         paste(input$no_people, "people will gain 10 years of life each"))
   })
   
