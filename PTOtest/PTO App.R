@@ -38,7 +38,7 @@ healthstate <- list ("This is a description of a 0.2 health state", #0.2 health 
                      "This is a description of a 1 health state",
                      "This is a description of a 1 health state",
                      "This is a description of a 1 health state"
-                     )
+)
 
 
 library(shiny)
@@ -46,57 +46,131 @@ library(shiny)
 # UI
 ui <- fluidPage(
   
+  # Custom CSS for responsiveness
+  tags$head(tags$style(HTML("
+    /* Center everything */
+    .container {
+      max-width: 1000px;  /* Limit width on large screens */
+      margin: auto;  /* Center content */
+    }
+    
+    /* Make text scale with screen size */
+    h1, h2, h3 {
+      font-size: calc(1rem + 1vw);
+    }
+    
+    /* Scale main sections */
+    .content-section {
+      width: 90%;
+      max-width: 900px;  /* Prevents excessive stretching */
+      margin: auto;
+    }
+
+    /* Adjust bar chart */
+    .chart-container {
+      width: 90%;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    /* Make option boxes responsive */
+    .option-box {
+      width: 45%;
+      min-width: 200px;
+      padding: 15px;
+      text-align: center;
+      border-radius: 8px;
+    }
+    
+    /* Stickmen display */
+    .stickmen-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+    
+    .stickmen-box {
+      width: 300px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid black;
+      background-color: white;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    
+    /* Responsive scaling */
+    @media (max-width: 768px) {
+      .option-box {
+        width: 90%;  /* Stack option boxes */
+        margin-bottom: 10px;
+      }
+      
+      .stickmen-box {
+        width: 250px;
+        height: 250px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1, h2, h3 {
+        font-size: calc(1rem + 0.5vw);
+      }
+      
+      .stickmen-box {
+        width: 200px;
+        height: 200px;
+      }
+    }
+  "))),
+  
   # Centered Title Panel
-  titlePanel(div("Person Trade-Off Exercise", style = "text-align: center; font-weight: bold; font-size: 26px;")),
+  titlePanel(div("Person Trade-Off Exercise", class = "content-section", style = "text-align: center; font-weight: bold; font-size: 26px;")),
   
   # Page Number Display
-  div(style = "text-align: center; font-size: 18px; font-weight: bold; margin-top: 10px;",
+  div(class = "content-section", style = "text-align: center; font-size: 18px; font-weight: bold; margin-top: 10px;",
       uiOutput("page_number")),
   
   # Instruction Section
-  div(style = "text-align: center; font-size: 18px; margin-bottom: 20px; padding: 10px; background-color: #f8f9fa; border-radius: 8px;", 
+  div(class = "content-section", style = "text-align: center; font-size: 18px; margin-bottom: 20px; padding: 10px; background-color: #f8f9fa; border-radius: 8px;", 
       p("All patients are aged 20. Please use the sliding scale to select 
          how many people should receive 10 years for Programme B to be equally valuable as 
          Programme A.")),  
   
   # Health State Display
-  div(style = "text-align: center; font-size: 18px; font-weight: bold; background-color: #eef7ff; 
-               padding: 10px; margin-bottom: 20px; border-radius: 8px; width: 50%; margin-left: auto; margin-right: auto;",
+  div(class = "content-section", style = "text-align: center; font-size: 18px; font-weight: bold; background-color: #eef7ff; 
+               padding: 10px; margin-bottom: 20px; border-radius: 8px;",
       uiOutput("healthstate_text")),  
   
   # Bar Chart Section
-  div(style = "display: flex; justify-content: center; margin-bottom: 20px;",
-      plotOutput('plot', height = "400px", width = "70%")),
+  div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 20px;",
+      plotOutput('plot', height = "400px", width = "100%")),
   
   # Side-by-side Option A and B Descriptions
-  div(style = "display: flex; justify-content: center; gap: 40px; margin-bottom: 20px;",
-      div(style = "width: 45%; text-align: center; font-size: 16px; background-color: peachpuff; 
-                   padding: 15px; border-radius: 8px; border: 1px solid black;", 
+  div(class = "content-section", style = "display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-bottom: 20px;",
+      div(class = "option-box", style = "background-color: peachpuff; border: 1px solid peachpuff;", 
           strong("Option A"), br(), 
           uiOutput("discription_of_option_A")),
-      div(style = "width: 45%; text-align: center; font-size: 16px; background-color: darkseagreen; 
-                   padding: 15px; border-radius: 8px; border: 1px solid black;", 
-          strong("Option B"), br(), 
-          uiOutput ("discription_of_option_B"))
+      div(class = "option-box", style = "background-color: darkseagreen; border: 1px solid darkseagreen;", 
+          strong("Option B"), br(),
+          uiOutput("discription_of_option_B")),
   ),
   
   # Stickmen Display Section
-  div(style = "display: flex; justify-content: center; gap: 40px; margin-bottom: 20px;",
-      div(style = "width: 350px; height: 350px; display: flex; align-items: center; justify-content: center; 
-                   border: 1px solid black; background-color: white; padding: 10px; border-radius: 8px;",
-          uiOutput("stickmen_display_A")),
-      
-      div(style = "width: 350px; height: 350px; display: flex; align-items: center; justify-content: center; 
-                   border: 1px solid black; background-color: white; padding: 10px; border-radius: 8px;",
-          uiOutput("stickmen_display_B"))
+  div(class = "stickmen-container",
+      div(class = "stickmen-box", uiOutput("stickmen_display_A")),
+      div(class = "stickmen-box", uiOutput("stickmen_display_B"))
   ),
   
   # Slider Input
-  div(style = "text-align: center; margin-bottom: 20px;",
-      sliderInput("no_people", "Number of People Benefiting from Option B", min = 1, max = 100, value = 1, width = "100%")),
+  div(class = "content-section", style = "text-align: center; margin-bottom: 30px;",
+      sliderInput("no_people", "Number of People Benefiting from Option B", min = 1, max = 100, value = 1, width = "80%")),
   
   # Submit Button
-  div(style = "text-align: center;",
+  div(class = "content-section", style = "text-align: center;",
       actionButton("submit", "Submit", class = "btn btn-primary btn-lg", 
                    style = "padding: 12px 30px; font-size: 18px;"))
 )
@@ -115,7 +189,7 @@ server <- function(input, output, session) {
     div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
         paste("Health State: ", healthstate[[page()]]))
   })
-
+  
   
   #Render the bar chart
   output$plot <- renderPlot({
