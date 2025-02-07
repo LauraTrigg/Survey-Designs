@@ -357,9 +357,8 @@ s
   observeEvent(input$submit, {
     showModal(modalDialog(
       title = "Thank you for your response!",
-      paste("This means you believe that 20 people gaining 5 extra years of life is equally valuable as", 
-            input$no_people, 
-            "people gaining 10 extra years of life. Is this correct?"),
+      paste("This means you believe that",optionA$people[[(page())]],"people living for" , optionA$gains[[(page())]] ,"years is 
+            equal to ", input$no_people, "people living for 10 years. Is this correct?"),
       footer = tagList(
         actionButton("yes_continue", "Yes, Continue", class = "btn-primary"),
         actionButton("no_go_back", "No, Go Back", class = "btn-danger")
