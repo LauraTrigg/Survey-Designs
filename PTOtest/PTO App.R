@@ -152,63 +152,64 @@ ui <- fluidPage(
     }
   ")))},
   
-  # Centered Title Panel
-  titlePanel(div("Person Trade-Off Exercise", class = "content-section", 
-                 style = "text-align: center; font-weight: bold; font-size: 26px; color: #333;")),
-  
-  # Page Number Display
-  div(class = "content-section", style = "text-align: center; font-size: 18px; font-weight: bold; margin-top: 10px;",
-      uiOutput("page_number")),
-  
-  # Instruction Section
-  div(class = "content-section", 
-      style = "text-align: center; font-size: 18px; margin-bottom: 5px; 
-               padding: 15px; background-color: #f8f9fa; border-radius: 8px;",
-      p("All patients are aged 20. Please use the sliding scale to select 
-         how many people should receive 10 years for Programme B to be equally valuable as 
-         Programme A.")),  
-  
-  # Health State Description + Heart (Side-by-Side)
-  div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 20px;",
-      # Heart on the left
-      div(style = "flex: 1; min-width: 120px; display: flex; justify-content: flex-start;",
-          uiOutput("healthstate_heart")),
-      # Text on the right
-      div(style = "flex: 3; text-align: left; font-size: 18px; font-weight: bold; background-color: #eef7ff; 
-                padding: 10px; border-radius: 8px;",
-          uiOutput("healthstate_text"))
-  ),
-  
-  # Bar Chart Section
-  div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 20px;",
-      plotOutput('plot', height = "400px", width = "100%")),
-  
-  # Side-by-side Option A and B Descriptions
-  div(class = "content-section", 
-      style = "display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-bottom: 20px;",
-      div(class = "option-box", style = "background-color: peachpuff;", 
-          strong("Option A"), br(), 
-          uiOutput("discription_of_option_A")),
-      div(class = "option-box", style = "background-color: darkseagreen;", 
-          strong("Option B"), br(),
-          uiOutput("discription_of_option_B"))
-  ),
-  
-  # Stickmen Display Section
-  div(class = "stickmen-container", style = "margin-bottom: 30px; gap: 50px;",
-      div(class = "stickmen-box", uiOutput("stickmen_display_A")),
-      div(class = "stickmen-box", uiOutput("stickmen_display_B"))
-  ),
-  
-  # Slider Input
-  div(class = "content-section", style = "text-align: center; margin-bottom: 30px;",
-      sliderInput("no_people", "Number of People Benefiting from Option B", 
-                  min = 1, max = 100, value = 1, width = "100%")),
-  
-  # Submit Button
-  div(class = "content-section", style = "text-align: center;",
-      actionButton("submit", "Submit", class = "btn btn-primary btn-lg", 
-                   style = "padding: 12px 30px; font-size: 18px;"))
+ # Centered Title Panel
+ titlePanel(div("Person Trade-Off Exercise", class = "content-section", 
+                style = "text-align: center; font-weight: bold; font-size: 24px; color: #333; margin-bottom: 5px;")),
+ 
+ # Page Number Display
+ div(class = "content-section", style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 2px; margin-bottom: 5px;",
+     uiOutput("page_number")),
+ 
+ # Instruction Section
+ div(class = "content-section", 
+     style = "text-align: center; font-size: 16px; margin-bottom: 3px; 
+            padding: 8px; background-color: #f8f9fa; border-radius: 4px;",
+     p("All patients are aged 20. Please use the sliding scale to select 
+      how many people should receive 10 years for Programme B to be equally valuable as 
+      Programme A.")),  
+ 
+ # Health State Description + Heart (Side-by-Side)
+ div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 3px;",
+     # Heart on the left
+     div(style = "flex: 1; min-width: 100px; display: flex; justify-content: flex-start;",
+         uiOutput("healthstate_heart")),
+     # Text on the right
+     div(style = "flex: 3; text-align: left; font-size: 16px; font-weight: bold; background-color: #eef7ff; 
+             padding: 6px; border-radius: 6px;",
+         uiOutput("healthstate_text"))
+ ),
+ 
+ # Bar Chart Section
+ div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 15px;",
+     plotOutput('plot', height = "370px", width = "100%")),  # Reduced height
+ 
+ # Side-by-side Option A and B Descriptions
+ div(class = "content-section", 
+     style = "display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 15px;",
+     div(class = "option-box", style = "background-color: peachpuff; padding: 1px;", 
+         strong("Option A"), br(), 
+         uiOutput("discription_of_option_A")),
+     div(class = "option-box", style = "background-color: darkseagreen; padding: 10px;", 
+         strong("Option B"), br(),
+         uiOutput("discription_of_option_B"))
+ ),
+ 
+ # Stickmen Display Section
+ div(class = "stickmen-container", style = "margin-bottom: 20px; gap: 70px;",
+     div(class = "stickmen-box", uiOutput("stickmen_display_A")),
+     div(class = "stickmen-box", uiOutput("stickmen_display_B"))
+ ),
+ 
+ # Slider Input
+ div(class = "content-section", style = "text-align: center; margin-bottom: 20px;",
+     sliderInput("no_people", "Number of People Benefiting from Option B", 
+                 min = 1, max = 100, value = 1, width = "100%")),
+ 
+ # Submit Button
+ div(class = "content-section", style = "text-align: center; margin-bottom: 5px;",
+     actionButton("submit", "Submit", class = "btn btn-primary btn-md", 
+                  style = "padding: 10px 25px; font-size: 16px;"))
+ 
 )
 
 
@@ -224,7 +225,7 @@ server <- function(input, output, session) {
   #Text for the health state
   output$healthstate_text <- renderUI({
     div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
-        paste("All of the patients have the following health conditions: ", healthstatedescriptor[[page()]]))
+        paste("All patients have the following health conditions: ", healthstatedescriptor[[page()]]))
   })
   
   ##Rendering and filling in the heart for health states 
@@ -290,17 +291,7 @@ s
       )
   })
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
   #Text for under the bar charts 
   output$discription_of_option_A <- renderUI({
     div(style = "text-align: center; font-size: 16px; margin-top: 10px;",
