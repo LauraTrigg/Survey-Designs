@@ -1,5 +1,11 @@
 #setting up the variables 
 
+#If splitting into two blocks, have a variable that is optionA_block_A, and 
+#optionB_block_B to assign to optionA/health state to show the different questions 
+#to different blocks of participants. 
+
+#Input lists
+{
 optionA <- list (
   gains = c(1,2,5,20,50,
             1,2,5,20,50,
@@ -13,7 +19,7 @@ optionA <- list (
              100,50,20,5,2)
 )
 
-healthstate <- list ("This is a description of a 0.2 health state", #0.2 health state 
+healthstatedescriptor <- list ("This is a description of a 0.2 health state", #0.2 health state 
                      "This is a description of a 0.2 health state",
                      "This is a description of a 0.2 health state",
                      "This is a description of a 0.2 health state",
@@ -54,30 +60,32 @@ healthstate <- list ("This is a description of a 0.2 health state", #0.2 health 
                      "This is a description of a 1 health state"
 )
 
+healthstate <-  list (0.2,0.2,0.2,0.2,0.2,
+                      0.4,0.4,0.4,0.4,0.4,
+                      0.6,0.6,0.6,0.6,0.6,
+                      0.8,0.8,0.8,0.8,0.8,
+                      1.0,1.0,1.0,1.0,1.0)
+
+
+}
 
 library(shiny)
 
 # UI
 ui <- fluidPage(
   
-  # Custom CSS for responsiveness
-  {
-  tags$head(tags$style(HTML("
-    /* Center everything */
+  # Custom CSS for responsiveness & improved design
+ { tags$head(tags$style(HTML("
+    /* Center and limit width */
     .container {
-      max-width: 1000px;  /* Limit width on large screens */
-      margin: auto;  /* Center content */
-    }
-    
-    /* Make text scale with screen size */
-    h1, h2, h3 {
-      font-size: calc(1rem + 1vw);
+      max-width: 1000px;
+      margin: auto;
     }
     
     /* Scale main sections */
     .content-section {
       width: 90%;
-      max-width: 900px;  /* Prevents excessive stretching */
+      max-width: 900px;
       margin: auto;
     }
 
@@ -95,14 +103,16 @@ ui <- fluidPage(
       padding: 15px;
       text-align: center;
       border-radius: 8px;
+      background-color: white;
+      border: 2px solid #ddd;
     }
-    
+
     /* Stickmen display */
     .stickmen-container {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 30px;
+      gap: 50px;
     }
     
     .stickmen-box {
@@ -120,7 +130,7 @@ ui <- fluidPage(
     /* Responsive scaling */
     @media (max-width: 768px) {
       .option-box {
-        width: 90%;  /* Stack option boxes */
+        width: 90%;
         margin-bottom: 10px;
       }
       
@@ -141,55 +151,66 @@ ui <- fluidPage(
       }
     }
   ")))},
-
   
   # Centered Title Panel
-  titlePanel(div("Person Trade-Off Exercise", class = "content-section", style = "text-align: center; font-weight: bold; font-size: 26px;")),
+  titlePanel(div("Person Trade-Off Exercise", class = "content-section", 
+                 style = "text-align: center; font-weight: bold; font-size: 26px; color: #333;")),
   
   # Page Number Display
   div(class = "content-section", style = "text-align: center; font-size: 18px; font-weight: bold; margin-top: 10px;",
       uiOutput("page_number")),
   
   # Instruction Section
-  div(class = "content-section", style = "text-align: center; font-size: 18px; margin-bottom: 20px; padding: 10px; background-color: #f8f9fa; border-radius: 8px;", 
+  div(class = "content-section", 
+      style = "text-align: center; font-size: 18px; margin-bottom: 5px; 
+               padding: 15px; background-color: #f8f9fa; border-radius: 8px;",
       p("All patients are aged 20. Please use the sliding scale to select 
          how many people should receive 10 years for Programme B to be equally valuable as 
          Programme A.")),  
   
-  # Health State Display
-  div(class = "content-section", style = "text-align: center; font-size: 18px; font-weight: bold; background-color: #eef7ff; 
-               padding: 10px; margin-bottom: 20px; border-radius: 8px;",
-      uiOutput("healthstate_text")),  
+  # Health State Description + Heart (Side-by-Side)
+  div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 20px;",
+      # Heart on the left
+      div(style = "flex: 1; min-width: 120px; display: flex; justify-content: flex-start;",
+          uiOutput("healthstate_heart")),
+      # Text on the right
+      div(style = "flex: 3; text-align: left; font-size: 18px; font-weight: bold; background-color: #eef7ff; 
+                padding: 10px; border-radius: 8px;",
+          uiOutput("healthstate_text"))
+  ),
   
   # Bar Chart Section
   div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 20px;",
       plotOutput('plot', height = "400px", width = "100%")),
   
   # Side-by-side Option A and B Descriptions
-  div(class = "content-section", style = "display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-bottom: 20px;",
-      div(class = "option-box", style = "background-color: peachpuff; border: 1px solid peachpuff;", 
+  div(class = "content-section", 
+      style = "display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-bottom: 20px;",
+      div(class = "option-box", style = "background-color: peachpuff;", 
           strong("Option A"), br(), 
           uiOutput("discription_of_option_A")),
-      div(class = "option-box", style = "background-color: darkseagreen; border: 1px solid darkseagreen;", 
+      div(class = "option-box", style = "background-color: darkseagreen;", 
           strong("Option B"), br(),
-          uiOutput("discription_of_option_B")),
+          uiOutput("discription_of_option_B"))
   ),
   
   # Stickmen Display Section
-  div(class = "stickmen-container", style = "margin-bottom: 30px;gap: 100px;",
+  div(class = "stickmen-container", style = "margin-bottom: 30px; gap: 50px;",
       div(class = "stickmen-box", uiOutput("stickmen_display_A")),
       div(class = "stickmen-box", uiOutput("stickmen_display_B"))
   ),
   
   # Slider Input
   div(class = "content-section", style = "text-align: center; margin-bottom: 30px;",
-      sliderInput("no_people", "Number of People Benefiting from Option B", min = 1, max = 100, value = 1, width = "100%")),
+      sliderInput("no_people", "Number of People Benefiting from Option B", 
+                  min = 1, max = 100, value = 1, width = "100%")),
   
   # Submit Button
   div(class = "content-section", style = "text-align: center;",
       actionButton("submit", "Submit", class = "btn btn-primary btn-lg", 
                    style = "padding: 12px 30px; font-size: 18px;"))
 )
+
 
 
 server <- function(input, output, session) {
@@ -203,20 +224,82 @@ server <- function(input, output, session) {
   #Text for the health state
   output$healthstate_text <- renderUI({
     div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
-        paste("All of the patients have the following health conditions: ", healthstate[[page()]]))
+        paste("All of the patients have the following health conditions: ", healthstatedescriptor[[page()]]))
   })
   
-  
+  ##Rendering and filling in the heart for health states 
+  output$healthstate_heart <- renderUI({
+    health_state <- healthstate[[page()]]  # Get current health state (0.2, 0.4, etc.)
+    fill_percentage <- health_state * 100  # Convert to percentage (e.g., 0.6 -> 60%)
+    
+    # Convert fill percentage into correct Y-position and height
+    total_height <- 24  # Total SVG height
+    fill_height <- round((fill_percentage / 100) * total_height, 2)  # Rounded fill height
+    fill_y <- total_height - fill_height  # Start filling from the bottom
+    
+    heart_svg <- sprintf("
+    <svg viewBox='0 -4 24 27' width='120' height='110' xmlns='http://www.w3.org/2000/svg'>
+      <!-- Heart Outline with Thin Stroke -->
+      <path fill='none' stroke='black' stroke-width='1.2' 
+            d='M12 22C12 22 4 14 4 8.5C4 5 6.5 2 10 2C11.9 2 13.4 3.2 14 4.3C14.6 3.2 16.1 2 18 2C21.5 2 24 5 24 8.5C24 14 16 22 16 22H12Z'/>
+s
+      <!-- Clipping Mask for the Fill -->S
+      <defs>
+        <clipPath id='heart-clip'>
+          <path d='M12 22C12 22 4 14 4 8.5C4 5 6.5 2 10 2C11.9 2 13.4 3.2 14 4.3C14.6 3.2 16.1 2 18 2C21.5 2 24 5 24 8.5C24 14 16 22 16 22H12Z'/>
+        </clipPath>
+      </defs>
+
+      <!-- Correctly Sized Filled Heart (Clipped to Shape) -->
+      <rect x='0' y='%f' width='24' height='%f' fill='red' opacity='0.8' clip-path='url(#heart-clip)' />
+    </svg>", fill_y, fill_height)
+    
+    div(style = "text-align: center; margin: 20px 0;",  # 20px top & bottom margin
+        HTML(heart_svg))  # Insert the heart SVG
+  })
+
   #Render the bar chart
   output$plot <- renderPlot({
-    barplot(c(optionA$gains[[page()]], 10), names.arg = c("Option A", "Option B"), 
-            col = c("peachpuff","darkseagreen"), ylim = c(0, 11), border = NA)
-    title("Gains Per Person", 
-          ylab = "Years Gained",
-          col.main = "black")
-    axis(2, col.axis = "black")
-    box(col = "white")
+    library(ggplot2)
+    
+    # Create a data frame for plotting
+    data <- data.frame(
+      Option = c("Option A", "Option B"),
+      Gains = c(optionA$gains[[page()]], 10)  # Option B always has 10 years
+    )
+    
+    # Find the max y-axis limit (adding a small buffer for visibility)
+    max_y <- max(data$Gains) + 1  # Ensures labels are fully visible
+    
+    # Generate the improved bar chart
+    ggplot(data, aes(x = Option, y = Gains, fill = Option)) +
+      geom_bar(stat = "identity", width = 0.6, show.legend = FALSE) +  
+      geom_text(aes(label = Gains), vjust = -0.3, size = 6, fontface = "bold") +  
+      scale_fill_manual(values = c("peachpuff", "darkseagreen")) +  # Custom colors
+      scale_y_continuous(breaks = seq(0, max_y, by = 1), limits = c(0, max_y)) +  
+      labs(title = "Gains Per Person", 
+           x = "", 
+           y = "") +
+      theme_minimal(base_size = 14) +  # Cleaner look
+      theme(
+        plot.title = element_text(hjust = 0.5, face = "bold"),  # Center title
+        axis.text.x = element_text(face = "bold", size = 18),
+        axis.text.y = element_blank(), #element_text(face = "bold", size = 13),
+        panel.grid = element_blank(),  # Remove all gridlines
+        panel.background = element_rect(fill = "white", color = NA)  # White background
+      )
   })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   #Text for under the bar charts 
   output$discription_of_option_A <- renderUI({
