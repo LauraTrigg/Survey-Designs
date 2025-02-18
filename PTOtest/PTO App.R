@@ -127,10 +127,12 @@ server <- function(input, output, session) {
     page(5)
     survey_page(1)
     })
+  observeEvent(input$Back, { page(page() - 1) })
   
-  # Introduction Page 1
+  # UI for all pages
   output$page_content <- renderUI({
     
+    #Introduction page 1 
     if (page() == 1) {
       tagList(
         div(style = "text-align: center; max-width: 800px; margin: auto;",
@@ -154,6 +156,7 @@ server <- function(input, output, session) {
       )
       
     } 
+    #Introduction page 2
     else if (page() == 2) {
       tagList(
         div(style = "text-align: center; max-width: 800px; margin: auto;",
@@ -179,11 +182,15 @@ server <- function(input, output, session) {
             p("Please answer based on what you think is best for the country."),
             
             actionButton("start_examples", "Start Examples",  
+                         style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;"),
+            
+            actionButton("Back", "Back",  
                          style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
         )
       )
       
     } 
+    #Example page 1
     else if (page() == 3) {
       tagList(
         
@@ -237,10 +244,13 @@ server <- function(input, output, session) {
         ),
         
         actionButton("next2", "Next",
+                     style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;"),
+        actionButton("Back", "Back",  
                      style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
         
       )
     } 
+    #Example page 2
     else if (page() == 4) {
       tagList(
         
@@ -302,12 +312,16 @@ server <- function(input, output, session) {
             sliderInput("no_people", "Number of People Benefiting from Option B", 
                         min = 1, max = 100, value = 1, width = "100%")),
         
-        # Submit Button
+
         div(class = "content-section", style = "text-align: center; margin-bottom: 5px;",
             actionButton("start_survey", "Start Survey", class = "btn btn-primary btn-md", 
-                         style = "padding: 10px 25px; font-size: 16px;"))
+                         style = "padding: 10px 25px; font-size: 16px;")),
+        
+        actionButton("Back", "Back",  
+                     style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
       )
     }
+    #Survey page
     else {
       
       tagList(
@@ -373,7 +387,7 @@ server <- function(input, output, session) {
     }
   })
 
-  #Introduction Page 2
+
   output$page_number <- renderUI({
     div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
         paste("Question", survey_page()))
