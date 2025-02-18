@@ -6,7 +6,7 @@
 #optionB_block_B to assign to optionA/health state to show the different questions 
 #to different blocks of participants. 
 
-#Input lists    #could I just add 33 extra numbers here so it matches? 
+#Input lists   
 {
   # Input Lists
   optionA <- list(
@@ -117,13 +117,18 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   
   page <- reactiveVal(1)
+  survey_page <- reactiveVal(1)
   
   # Observers to update the page when buttons are clicked
   observeEvent(input$next1, { page(2) })
   observeEvent(input$start_examples, { page(3)})
-  observeEvent(input$start_survey, { page(4) })
+  observeEvent(input$next2, { page(4) })
+  observeEvent(input$start_survey, { 
+    page(5)
+    survey_page(1)
+    })
   
-  ### Introduction Page ###
+  # Introduction Page 1
   output$page_content <- renderUI({
     
     if (page() == 1) {
@@ -194,9 +199,69 @@ server <- function(input, output, session) {
         div(class = "content-section", 
             style = "text-align: center; font-size: 16px; margin-bottom: 3px; 
             padding: 8px; background-color: #f8f9fa; border-radius: 4px;",
-            p("All patients are aged 20. Please use the sliding scale to select 
-            how many people should receive 10 years for Programme B to be equally valuable as 
-            Programme A.")),  
+            p("In the following questions, you will see a visual representation of 
+        the trade-off you are making. In this example, in Option A, there 
+        are 20 people who will live for 5 years each, and in Option B, there 
+        are 10 people who will live for 10 years each. The bar chart will show 
+        you how long each person will live in each option.")  
+        ),  
+        
+        # Health State Description + Heart (Side-by-Side)
+        div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 3px;",
+            # Heart on the left
+            div(style = "flex: 1; min-width: 100px; display: flex; justify-content: flex-start;",
+                uiOutput("healthstate_heart")),
+            
+            # Text on the right
+            div(style = "flex: 3; text-align: left; font-size: 16px; font-weight: bold; background-color: #eef7ff; 
+        padding: 6px; border-radius: 6px;",
+                p("In the survey, the level of health of each participant will 
+           be varied. Here you will see a description of the level of 
+           health for each participant.")
+            )
+        ),
+        
+        # Bar Chart Section
+        div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 15px;",
+            plotOutput('plot', height = "370px", width = "100%")),  # Reduced height
+        
+        # Side-by-side Option A and B Descriptions
+        div(class = "content-section", 
+            style = "display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 15px;",
+            div(class = "option-box", style = "background-color: peachpuff; padding: 1px;", 
+                strong("Option A"), br(), 
+                uiOutput("discription_of_option_A")),
+            div(class = "option-box", style = "background-color: darkseagreen; padding: 10px;", 
+                strong("Option B"), br(),
+                p("10 people will gain 10 years of life each"))
+        ),
+        
+        actionButton("next2", "Next",
+                     style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
+        
+      )
+    } 
+    else if (page() == 4) {
+      tagList(
+        
+        # Centered Title Panel
+        titlePanel(div("Person Trade-Off Exercise", class = "content-section", 
+                       style = "text-align: center; font-weight: bold; font-size: 24px; color: #333; margin-bottom: 5px;")),
+        
+        # Page Number Display
+        div(class = "content-section", style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 2px; margin-bottom: 5px;",
+            uiOutput("page_number")),
+        
+        # Instruction Section
+        div(class = "content-section", 
+            style = "text-align: center; font-size: 16px; margin-bottom: 3px; 
+            padding: 8px; background-color: #f8f9fa; border-radius: 4px;",
+            p("Now you can see a slider which you will use to show how many 
+              people should benefit in Option B to make options A and B equally
+              valuable. The stick figures are used to show you how many people
+              will benefit from the treatment. Practice using the slider 
+              to change the number of people that will recieve treatment 
+              in Option B")),  
         
         # Health State Description + Heart (Side-by-Side)
         div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 3px;",
@@ -206,7 +271,9 @@ server <- function(input, output, session) {
             # Text on the right
             div(style = "flex: 3; text-align: left; font-size: 16px; font-weight: bold; background-color: #eef7ff; 
              padding: 6px; border-radius: 6px;",
-                uiOutput("healthstate_text"))
+                p("In the survey, the level of health of each participant will 
+           be varied. Here you will see a description of the level of 
+           health for each participant."))
         ),
         
         # Bar Chart Section
@@ -240,7 +307,7 @@ server <- function(input, output, session) {
             actionButton("start_survey", "Start Survey", class = "btn btn-primary btn-md", 
                          style = "padding: 10px 25px; font-size: 16px;"))
       )
-    } 
+    }
     else {
       
       tagList(
@@ -306,20 +373,21 @@ server <- function(input, output, session) {
     }
   })
 
+  #Introduction Page 2
   output$page_number <- renderUI({
     div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
-        paste("Question", page()))
-  })  # This no longer matches the question number so come back to this. 
+        paste("Question", survey_page()))
+  }) 
   
   #Text for the health state
   output$healthstate_text <- renderUI({
     div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
-        paste("All patients have the following health conditions: ", healthstatedescriptor[[page()]]))
+        paste("All patients have the following health conditions: ", healthstatedescriptor[[survey_page()]]))
   })
   
-  ##Rendering and filling in the heart for health states 
+  #Rendering and filling in the heart for health states 
   output$healthstate_heart <- renderUI({
-    health_state <- healthstate[[page()]]  # Get current health state (0.2, 0.4, etc.)
+    health_state <- healthstate[[survey_page()]]  # Get current health state (0.2, 0.4, etc.)
     fill_percentage <- health_state * 100  # Convert to percentage (e.g., 0.6 -> 60%)
     
     # Convert fill percentage into correct Y-position and height
@@ -355,7 +423,7 @@ s
     # Create a data frame for plotting
     data <- data.frame(
       Option = c("Option A", "Option B"),
-      Gains = c(optionA$gains[[page()]], 10)  # Option B always has 10 years
+      Gains = c(optionA$gains[[survey_page()]], 10)  # Option B always has 10 years
     )
     
     # Find the max y-axis limit (adding a small buffer for visibility)
@@ -379,12 +447,11 @@ s
         panel.background = element_rect(fill = "white", color = NA)  # White background
       )
   })
-  
-  
+
   #Text for under the bar charts 
   output$discription_of_option_A <- renderUI({
     div(style = "text-align: center; font-size: 16px; margin-top: 10px;",
-        paste(optionA$people[[page()]], "people will gain", optionA$gains[[page()]], "years of life each"))
+        paste(optionA$people[[survey_page()]], "people will gain", optionA$gains[[survey_page()]], "years of life each"))
   })
   output$discription_of_option_B <- renderUI({
     div(style = "text-align: center; font-size: 16px;  margin-top: 10px;",
@@ -393,13 +460,12 @@ s
         } else
           paste(input$no_people, "people will gain 10 years of life each"))
   })
-  
-  
+
   #Render the stickmen for option A
   output$stickmen_display_A <- renderUI({
     box_width <- 300
     box_height <- 300
-    Option_A_gains_pp <- optionA$people[[page()]]
+    Option_A_gains_pp <- optionA$people[[survey_page()]]
     cols <- ceiling(sqrt(Option_A_gains_pp))
     rows <- ceiling(Option_A_gains_pp / cols)
     stickman_width <- box_width / cols * 0.9
@@ -446,7 +512,7 @@ s
   observeEvent(input$submit, {
     showModal(modalDialog(
       title = "Thank you for your response!",
-      paste("This means you believe that",optionA$people[[(page())]],"people living for" , optionA$gains[[(page())]] ,"years is 
+      paste("This means you believe that",optionA$people[[(survey_page())]],"people living for" , optionA$gains[[(survey_page())]] ,"years is 
             equal to ", input$no_people, "people living for 10 years. Is this correct?"),
       footer = tagList(
         actionButton("yes_continue", "Yes, Continue", class = "btn-primary"),
@@ -457,8 +523,8 @@ s
   
   # Action when "Yes, Continue" is clicked
   observeEvent(input$yes_continue, {
-    if (page() < length(optionA$gains)) {
-      page(page() + 1)  # Increment page number
+    if (survey_page() < length(optionA$page)) {
+      survey_page(survey_page() + 1)
       removeModal()  # Close the modal dialog
       showNotification("You have confirmed your response")
       updateSliderInput(session, "no_people", value = 1)  # Reset the slider
@@ -477,6 +543,5 @@ s
   })
   
   }
-
 
 shinyApp(ui = ui, server = server)
