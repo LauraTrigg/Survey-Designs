@@ -120,7 +120,8 @@ server <- function(input, output, session) {
   
   # Observers to update the page when buttons are clicked
   observeEvent(input$next1, { page(2) })
-  observeEvent(input$start_survey, { page(3) })
+  observeEvent(input$start_examples, { page(3)})
+  observeEvent(input$start_survey, { page(4) })
   
   ### Introduction Page ###
   output$page_content <- renderUI({
@@ -129,25 +130,68 @@ server <- function(input, output, session) {
       tagList(
         div(style = "text-align: center; max-width: 800px; margin: auto;",
             h2("Welcome to the Survey"),
-            p("This is the first page"),
-            p("Please read the instructions carefully before proceeding."),
-            actionButton("next1", "Next", class = "btn btn-primary", 
+            p("In this study, you will be asked to make decisions about how
+              healthcare resources should be spread across different groups of 
+              patients. These decisions involve trade-offs between the number of
+              patients receiving a treatment, and the number of years of 
+              additional life they will each get."),
+            p("In each question, there are two options, options A and B.
+              In option A, you will be told how many people will get the treatment, 
+              and how long they will live for once they get it. For option B, 
+              the patients who get the treatment will live for 10 more years.
+              Your task is to decide how many patients will get this treatment so
+              that you think that option A and option B are equally valuable."),
+            p("The treatment will not change the patient’s quality of life but 
+              extends their life expectancy."),
+            actionButton("next1", "Next",
                          style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
         )
       )
       
-    } else if (page() == 2) {
+    } 
+    else if (page() == 2) {
+      tagList(
+        div(style = "text-align: center; max-width: 800px; margin: auto;",
+            h2("Key Considerations"),
+            p("Before you start, please imagine you are in charge of a healthcare 
+              budget for the country. It is your job to decide how best to 
+              distribute these life-extending treatments."),
+            p("There are 100 patients that need this treatment, and they are 
+              identical with respect to age and health condition."),
+            p("This task reflects real-world challenges in healthcare decision-making, 
+              where resources are finite, and trade-offs must be considered. You must 
+              consider different factors, including:"),
+            
+            p("- Maximizing total life expectancy"),
+            p("- Treating the highest number of patients"),
+            p("- Or, a trade-off between the two."),
+            
+            p("Key things to remember:"),
+            p("- You are in charge of the healthcare budget for the country"),
+            p("- There are 100 patients that need treatment, and they are all aged 20"),
+            p("- Those who do not receive this treatment will die immediately"),
+            
+            p("Please answer based on what you think is best for the country."),
+            
+            actionButton("start_examples", "Start Examples",  
+                         style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
+        )
+      )
+      
+    } 
+    else if (page() == 3) {
       tagList(
         div(style = "text-align: center; max-width: 800px; margin: auto;",
             h2("Welcome to the Survey"),
-            p("This is the second page "),
+            p("this is where an example will be"),
             p("Please read the instructions carefully before proceeding."),
-            actionButton("start_survey", "Start Examples", class = "btn btn-primary", 
+            actionButton("start_survey", "Start Survey", class = "btn btn-primary", 
                          style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
         )
       )
       
-    } else {
+    } 
+    else {
       
       tagList(
         
@@ -211,15 +255,11 @@ server <- function(input, output, session) {
       )
     }
   })
-  
-#########################################
-
-
 
   output$page_number <- renderUI({
     div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
         paste("Question", page()))
-  })
+  })  # This no longer matches the question number so come back to this. 
   
   #Text for the health state
   output$healthstate_text <- renderUI({
