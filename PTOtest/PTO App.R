@@ -8,67 +8,22 @@
 
 #Input lists
 {
-optionA <- list (
-  gains = c(1,2,5,20,50,
-            1,2,5,20,50,
-            1,2,5,20,50,
-            1,2,5,20,50,
-            1,2,5,20,50),
-  people = c(100,50,20,5,2,
-             100,50,20,5,2,
-             100,50,20,5,2,
-             100,50,20,5,2,
-             100,50,20,5,2)
-)
-
-healthstatedescriptor <- list ("This is a description of a 0.2 health state", #0.2 health state 
-                     "This is a description of a 0.2 health state",
-                     "This is a description of a 0.2 health state",
-                     "This is a description of a 0.2 health state",
-                     "This is a description of a 0.2 health state",
-                     
-                     "This is a description of a 0.4 health state", #0.4 health state
-                     "This is a description of a 0.4 health state", 
-                     "This is a description of a 0.4 health state", 
-                     "This is a description of a 0.4 health state", 
-                     "This is a description of a 0.4 health state", 
-                     
-                     "They have no problems walking about, with self-care or performinig usual activities. 
-                     They have extreme pain or discomfort. 
-                     They are moderately anxious or depressed", #0.601 health state
-                     "They have no problems walking about, with self-care or performinig usual activities. 
-                     They have extreme pain or discomfort. 
-                     They are moderately anxious or depressed",
-                     "They have no problems walking about, with self-care or performinig usual activities. 
-                     They have extreme pain or discomfort. 
-                     They are moderately anxious or depressed",
-                     "They have no problems walking about, with self-care or performinig usual activities. 
-                     They have extreme pain or discomfort. 
-                     They are moderately anxious or depressed",
-                     "They have no problems walking about, with self-care or performinig usual activities. 
-                     They have extreme pain or discomfort. 
-                     They are moderately anxious or depressed",
-                     
-                     "This is a description of a 0.8 health state", #0.8 health state
-                     "This is a description of a 0.8 health state",
-                     "This is a description of a 0.8 health state",
-                     "This is a description of a 0.8 health state",
-                     "This is a description of a 0.8 health state",
-                     
-                     "This is a description of a 1 health state", #1 health state 
-                     "This is a description of a 1 health state",
-                     "This is a description of a 1 health state",
-                     "This is a description of a 1 health state",
-                     "This is a description of a 1 health state"
-)
-
-healthstate <-  list (0.2,0.2,0.2,0.2,0.2,
-                      0.4,0.4,0.4,0.4,0.4,
-                      0.6,0.6,0.6,0.6,0.6,
-                      0.8,0.8,0.8,0.8,0.8,
-                      1.0,1.0,1.0,1.0,1.0)
-
-
+  # Input Lists
+  optionA <- list(
+    gains = rep(c(1, 2, 5, 20, 50), 5),
+    people = rep(c(100, 50, 20, 5, 2), 5)
+  )
+  
+  healthstatedescriptor <- rep(
+    c("This is a description of a 0.2 health state",
+      "This is a description of a 0.4 health state",
+      "They have no problems walking about, with self-care or performing usual activities. 
+     They have extreme pain or discomfort. They are moderately anxious or depressed",
+      "This is a description of a 0.8 health state",
+      "This is a description of a 1 health state"), 5
+  )
+  
+  healthstate <- rep(c(0.2, 0.4, 0.6, 0.8, 1.0), 5)
 }
 
 library(shiny)
@@ -77,7 +32,7 @@ library(shiny)
 ui <- fluidPage(
   
   # Custom CSS for responsiveness & improved design
- { tags$head(tags$style(HTML("
+  { tags$head(tags$style(HTML("
     /* Center and limit width */
     .container {
       max-width: 1000px;
@@ -153,99 +108,114 @@ ui <- fluidPage(
       }
     }
   ")))},
- 
- # Introduction Page (Initially Visible)
- uiOutput("intro_page"),
- 
- # Survey Page (Initially Hidden)
- uiOutput("survey_page")
+  
+  # Introduction Page (Initially Visible)
+  uiOutput("page_content")
 )
- 
+
 
 server <- function(input, output, session) {
   
-  ### Introduction Page ###
-  output$intro_page <- renderUI({
-    tagList(
-      div(style = "text-align: center; max-width: 800px; margin: auto;",
-          h2("Welcome to the Survey"),
-          p("This survey is about healthcare preferences. You will be asked to compare different options and indicate your preference."),
-          p("Please read the instructions carefully before proceeding."),
-          actionButton("start_survey", "Next", class = "btn btn-primary", style = "font-size: 18px; padding: 10px 20px;")
-      )
-    )
-  })
-  
-  output$survey_page <- renderUI ({
-    req(input$start_survey)
-     
-    tagList(
-      
-      # Centered Title Panel
-      titlePanel(div("Person Trade-Off Exercise", class = "content-section", 
-                     style = "text-align: center; font-weight: bold; font-size: 24px; color: #333; margin-bottom: 5px;")),
-      
-      # Page Number Display
-      div(class = "content-section", style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 2px; margin-bottom: 5px;",
-          uiOutput("page_number")),
-      
-      # Instruction Section
-      div(class = "content-section", 
-          style = "text-align: center; font-size: 16px; margin-bottom: 3px; 
-            padding: 8px; background-color: #f8f9fa; border-radius: 4px;",
-          p("All patients are aged 20. Please use the sliding scale to select 
-      how many people should receive 10 years for Programme B to be equally valuable as 
-      Programme A.")),  
-      
-      # Health State Description + Heart (Side-by-Side)
-      div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 3px;",
-          # Heart on the left
-          div(style = "flex: 1; min-width: 100px; display: flex; justify-content: flex-start;",
-              uiOutput("healthstate_heart")),
-          # Text on the right
-          div(style = "flex: 3; text-align: left; font-size: 16px; font-weight: bold; background-color: #eef7ff; 
-             padding: 6px; border-radius: 6px;",
-              uiOutput("healthstate_text"))
-      ),
-      
-      # Bar Chart Section
-      div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 15px;",
-          plotOutput('plot', height = "370px", width = "100%")),  # Reduced height
-      
-      # Side-by-side Option A and B Descriptions
-      div(class = "content-section", 
-          style = "display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 15px;",
-          div(class = "option-box", style = "background-color: peachpuff; padding: 1px;", 
-              strong("Option A"), br(), 
-              uiOutput("discription_of_option_A")),
-          div(class = "option-box", style = "background-color: darkseagreen; padding: 10px;", 
-              strong("Option B"), br(),
-              uiOutput("discription_of_option_B"))
-      ),
-      
-      # Stickmen Display Section
-      div(class = "stickmen-container", style = "margin-bottom: 20px; gap: 70px;",
-          div(class = "stickmen-box", uiOutput("stickmen_display_A")),
-          div(class = "stickmen-box", uiOutput("stickmen_display_B"))
-      ),
-      
-      # Slider Input
-      div(class = "content-section", style = "text-align: center; margin-bottom: 20px;",
-          sliderInput("no_people", "Number of People Benefiting from Option B", 
-                      min = 1, max = 100, value = 1, width = "100%")),
-      
-      # Submit Button
-      div(class = "content-section", style = "text-align: center; margin-bottom: 5px;",
-          actionButton("submit", "Submit", class = "btn btn-primary btn-md", 
-                       style = "padding: 10px 25px; font-size: 16px;"))
-      
-    )
-
-    
-  })
-  
-  
   page <- reactiveVal(1)
+  
+  # Observers to update the page when buttons are clicked
+  observeEvent(input$next1, { page(2) })
+  observeEvent(input$start_survey, { page(3) })
+  
+  ### Introduction Page ###
+  output$page_content <- renderUI({
+    
+    if (page() == 1) {
+      tagList(
+        div(style = "text-align: center; max-width: 800px; margin: auto;",
+            h2("Welcome to the Survey"),
+            p("This is the first page"),
+            p("Please read the instructions carefully before proceeding."),
+            actionButton("next1", "Next", class = "btn btn-primary", 
+                         style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
+        )
+      )
+      
+    } else if (page() == 2) {
+      tagList(
+        div(style = "text-align: center; max-width: 800px; margin: auto;",
+            h2("Welcome to the Survey"),
+            p("This is the second page "),
+            p("Please read the instructions carefully before proceeding."),
+            actionButton("start_survey", "Start Examples", class = "btn btn-primary", 
+                         style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
+        )
+      )
+      
+    } else {
+      
+      tagList(
+        
+        # Centered Title Panel
+        titlePanel(div("Person Trade-Off Exercise", class = "content-section", 
+                       style = "text-align: center; font-weight: bold; font-size: 24px; color: #333; margin-bottom: 5px;")),
+        
+        # Page Number Display
+        div(class = "content-section", style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 2px; margin-bottom: 5px;",
+            uiOutput("page_number")),
+        
+        # Instruction Section
+        div(class = "content-section", 
+            style = "text-align: center; font-size: 16px; margin-bottom: 3px; 
+            padding: 8px; background-color: #f8f9fa; border-radius: 4px;",
+            p("All patients are aged 20. Please use the sliding scale to select 
+            how many people should receive 10 years for Programme B to be equally valuable as 
+            Programme A.")),  
+        
+        # Health State Description + Heart (Side-by-Side)
+        div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 3px;",
+            # Heart on the left
+            div(style = "flex: 1; min-width: 100px; display: flex; justify-content: flex-start;",
+                uiOutput("healthstate_heart")),
+            # Text on the right
+            div(style = "flex: 3; text-align: left; font-size: 16px; font-weight: bold; background-color: #eef7ff; 
+             padding: 6px; border-radius: 6px;",
+                uiOutput("healthstate_text"))
+        ),
+        
+        # Bar Chart Section
+        div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 15px;",
+            plotOutput('plot', height = "370px", width = "100%")),  # Reduced height
+        
+        # Side-by-side Option A and B Descriptions
+        div(class = "content-section", 
+            style = "display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 15px;",
+            div(class = "option-box", style = "background-color: peachpuff; padding: 1px;", 
+                strong("Option A"), br(), 
+                uiOutput("discription_of_option_A")),
+            div(class = "option-box", style = "background-color: darkseagreen; padding: 10px;", 
+                strong("Option B"), br(),
+                uiOutput("discription_of_option_B"))
+        ),
+        
+        # Stickmen Display Section
+        div(class = "stickmen-container", style = "margin-bottom: 20px; gap: 70px;",
+            div(class = "stickmen-box", uiOutput("stickmen_display_A")),
+            div(class = "stickmen-box", uiOutput("stickmen_display_B"))
+        ),
+        
+        # Slider Input
+        div(class = "content-section", style = "text-align: center; margin-bottom: 20px;",
+            sliderInput("no_people", "Number of People Benefiting from Option B", 
+                        min = 1, max = 100, value = 1, width = "100%")),
+        
+        # Submit Button
+        div(class = "content-section", style = "text-align: center; margin-bottom: 5px;",
+            actionButton("submit", "Submit", class = "btn btn-primary btn-md", 
+                         style = "padding: 10px 25px; font-size: 16px;"))
+      )
+    }
+  })
+  
+#########################################
+
+
+
   output$page_number <- renderUI({
     div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
         paste("Question", page()))
@@ -287,7 +257,7 @@ s
     div(style = "text-align: center; margin: 20px 0;",  # 20px top & bottom margin
         HTML(heart_svg))  # Insert the heart SVG
   })
-
+  
   #Render the bar chart
   output$plot <- renderPlot({
     library(ggplot2)
@@ -320,7 +290,7 @@ s
       )
   })
   
-
+  
   #Text for under the bar charts 
   output$discription_of_option_A <- renderUI({
     div(style = "text-align: center; font-size: 16px; margin-top: 10px;",
@@ -331,7 +301,7 @@ s
         if (input$no_people == 1) {
           paste(input$no_people, "person will gain 10 years of life")
         } else
-        paste(input$no_people, "people will gain 10 years of life each"))
+          paste(input$no_people, "people will gain 10 years of life each"))
   })
   
   
@@ -416,6 +386,7 @@ s
     removeModal()  
   })
   
-}
+  }
+
 
 shinyApp(ui = ui, server = server)
