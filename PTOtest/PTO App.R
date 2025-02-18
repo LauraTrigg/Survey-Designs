@@ -6,7 +6,7 @@
 #optionB_block_B to assign to optionA/health state to show the different questions 
 #to different blocks of participants. 
 
-#Input lists
+#Input lists    #could I just add 33 extra numbers here so it matches? 
 {
   # Input Lists
   optionA <- list(
@@ -152,7 +152,7 @@ server <- function(input, output, session) {
     else if (page() == 2) {
       tagList(
         div(style = "text-align: center; max-width: 800px; margin: auto;",
-            h2("Key Considerations"),
+            h2("Welcome to the Survey"),
             p("Before you start, please imagine you are in charge of a healthcare 
               budget for the country. It is your job to decide how best to 
               distribute these life-extending treatments."),
@@ -181,15 +181,65 @@ server <- function(input, output, session) {
     } 
     else if (page() == 3) {
       tagList(
-        div(style = "text-align: center; max-width: 800px; margin: auto;",
-            h2("Welcome to the Survey"),
-            p("this is where an example will be"),
-            p("Please read the instructions carefully before proceeding."),
-            actionButton("start_survey", "Start Survey", class = "btn btn-primary", 
-                         style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
-        )
+        
+        # Centered Title Panel
+        titlePanel(div("Person Trade-Off Exercise", class = "content-section", 
+                       style = "text-align: center; font-weight: bold; font-size: 24px; color: #333; margin-bottom: 5px;")),
+        
+        # Page Number Display
+        div(class = "content-section", style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 2px; margin-bottom: 5px;",
+            uiOutput("page_number")),
+        
+        # Instruction Section
+        div(class = "content-section", 
+            style = "text-align: center; font-size: 16px; margin-bottom: 3px; 
+            padding: 8px; background-color: #f8f9fa; border-radius: 4px;",
+            p("All patients are aged 20. Please use the sliding scale to select 
+            how many people should receive 10 years for Programme B to be equally valuable as 
+            Programme A.")),  
+        
+        # Health State Description + Heart (Side-by-Side)
+        div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 3px;",
+            # Heart on the left
+            div(style = "flex: 1; min-width: 100px; display: flex; justify-content: flex-start;",
+                uiOutput("healthstate_heart")),
+            # Text on the right
+            div(style = "flex: 3; text-align: left; font-size: 16px; font-weight: bold; background-color: #eef7ff; 
+             padding: 6px; border-radius: 6px;",
+                uiOutput("healthstate_text"))
+        ),
+        
+        # Bar Chart Section
+        div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 15px;",
+            plotOutput('plot', height = "370px", width = "100%")),  # Reduced height
+        
+        # Side-by-side Option A and B Descriptions
+        div(class = "content-section", 
+            style = "display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 15px;",
+            div(class = "option-box", style = "background-color: peachpuff; padding: 1px;", 
+                strong("Option A"), br(), 
+                uiOutput("discription_of_option_A")),
+            div(class = "option-box", style = "background-color: darkseagreen; padding: 10px;", 
+                strong("Option B"), br(),
+                uiOutput("discription_of_option_B"))
+        ),
+        
+        # Stickmen Display Section
+        div(class = "stickmen-container", style = "margin-bottom: 20px; gap: 70px;",
+            div(class = "stickmen-box", uiOutput("stickmen_display_A")),
+            div(class = "stickmen-box", uiOutput("stickmen_display_B"))
+        ),
+        
+        # Slider Input
+        div(class = "content-section", style = "text-align: center; margin-bottom: 20px;",
+            sliderInput("no_people", "Number of People Benefiting from Option B", 
+                        min = 1, max = 100, value = 1, width = "100%")),
+        
+        # Submit Button
+        div(class = "content-section", style = "text-align: center; margin-bottom: 5px;",
+            actionButton("start_survey", "Start Survey", class = "btn btn-primary btn-md", 
+                         style = "padding: 10px 25px; font-size: 16px;"))
       )
-      
     } 
     else {
       
