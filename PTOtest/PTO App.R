@@ -129,11 +129,11 @@
                                  They have no pain or discomfort and are not anxious or depressed. "
   )
   
-  healthstate <-  list (0.2,0.2,0.2,0.2,0.2,
-                        0.4,0.4,0.4,0.4,0.4,
-                        0.6,0.6,0.6,0.6,0.6,
+  healthstate <-  list (0.198,0.198,0.198,0.198,0.198,
+                        0.408,0.408,0.408,0.408,0.408,
+                        0.601,0.601,0.601,0.601,0.601,
                         0.8,0.8,0.8,0.8,0.8,
-                        1.0,1.0,1.0,1.0,1.0)
+                        0.965,0.965,0.965,0.965,0.965)
   
 }
 
@@ -523,35 +523,28 @@ server <- function(input, output, session) {
         paste("All patients have the following health conditions: ", healthstatedescriptor[[survey_page()]]))
   })
   
-  #Rendering and filling in the heart for health states 
+  # Rendering and filling in the rectangle for health states 
   output$healthstate_heart <- renderUI({
     health_state <- healthstate[[survey_page()]]  # Get current health state (0.2, 0.4, etc.)
     fill_percentage <- health_state * 100  # Convert to percentage (e.g., 0.6 -> 60%)
     
     # Convert fill percentage into correct Y-position and height
     total_height <- 24  # Total SVG height
+    total_width <- 20   # Total SVG width
     fill_height <- round((fill_percentage / 100) * total_height, 2)  # Rounded fill height
     fill_y <- total_height - fill_height  # Start filling from the bottom
     
-    heart_svg <- sprintf("
-    <svg viewBox='0 -4 24 27' width='120' height='110' xmlns='http://www.w3.org/2000/svg'>
-      <!-- Heart Outline with Thin Stroke -->
-      <path fill='none' stroke='black' stroke-width='1.2' 
-            d='M12 22C12 22 4 14 4 8.5C4 5 6.5 2 10 2C11.9 2 13.4 3.2 14 4.3C14.6 3.2 16.1 2 18 2C21.5 2 24 5 24 8.5C24 14 16 22 16 22H12Z'/>
-s
-      <!-- Clipping Mask for the Fill -->S
-      <defs>
-        <clipPath id='heart-clip'>
-          <path d='M12 22C12 22 4 14 4 8.5C4 5 6.5 2 10 2C11.9 2 13.4 3.2 14 4.3C14.6 3.2 16.1 2 18 2C21.5 2 24 5 24 8.5C24 14 16 22 16 22H12Z'/>
-        </clipPath>
-      </defs>
-
-      <!-- Correctly Sized Filled Heart (Clipped to Shape) -->
-      <rect x='0' y='%f' width='24' height='%f' fill='red' opacity='0.8' clip-path='url(#heart-clip)' />
-    </svg>", fill_y, fill_height)
+    rectangle_svg <- sprintf("
+  <svg viewBox='0 0 24 24' width='110' height='110' xmlns='http://www.w3.org/2000/svg'>
+    <!-- Rectangle Outline -->
+    <rect x='0' y='0' width='24' height='24' stroke='black' stroke-width='1.2' fill='none' />
+    
+    <!-- Filling Rectangle -->
+    <rect x='0' y='%f' width='24' height='%f' fill='red' opacity='1' />
+  </svg>", fill_y, fill_height)
     
     div(style = "text-align: center; margin: 20px 0;",  # 20px top & bottom margin
-        HTML(heart_svg))  # Insert the heart SVG
+        HTML(rectangle_svg))  # Insert the rectangle SVG
   })
   
   #Render the bar chart
