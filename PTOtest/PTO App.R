@@ -14,45 +14,119 @@
     people = rep(c(100, 50, 20, 5, 2), 5)
   )
   
-  healthstatedescriptor <- list ("This is a description of a 0.2 health state", #0.2 health state 
-                                 "This is a description of a 0.2 health state",
-                                 "This is a description of a 0.2 health state",
-                                 "This is a description of a 0.2 health state",
-                                 "This is a description of a 0.2 health state",
+  healthstatedescriptor <- list ("They are confined to bed, and are unable to 
+                                 perform usual activities. They have moderate pain 
+                                 or discomfort, and are moderately anxious or 
+                                 depressed. However, they have no problems with self care", #0.2 health state 
+                                 "They are confined to bed, and are unable to 
+                                 perform usual activities. They have moderate pain 
+                                 or discomfort, and are moderately anxious or 
+                                 depressed. However, they have no problems with self care",
+                                 "They are confined to bed, and are unable to 
+                                 perform usual activities. They have moderate pain 
+                                 or discomfort, and are moderately anxious or 
+                                 depressed. However, they have no problems with self care",
+                                 "They are confined to bed, and are unable to 
+                                 perform usual activities. They have moderate pain 
+                                 or discomfort, and are moderately anxious or 
+                                 depressed. However, they have no problems with self care",
+                                 "They are confined to bed, and are unable to 
+                                 perform usual activities. They have moderate pain 
+                                 or discomfort, and are moderately anxious or 
+                                 depressed. However, they have no problems with self care",
                                  
-                                 "This is a description of a 0.4 health state", #0.4 health state
-                                 "This is a description of a 0.4 health state", 
-                                 "This is a description of a 0.4 health state", 
-                                 "This is a description of a 0.4 health state", 
-                                 "This is a description of a 0.4 health state", 
+                                 "They have some problems walking about,
+                                 and are unable to wash or dress themselves.
+                                 They have extreme pain or discomfort, but have 
+                                 no problems with self-care and are not anxious 
+                                 or depressed ", #0.4 health state
+                                 "They have some problems walking about, 
+                                 and are unable to wash or dress themselves. 
+                                 They have extreme pain or discomfort, but have 
+                                 no problems with self-care and are not anxious 
+                                 or depressed ", 
+                                 "They have some problems walking about, 
+                                 and are unable to wash or dress themselves. 
+                                 They have extreme pain or discomfort, 
+                                 but have no problems with self-care and 
+                                 are not anxious or depressed ", 
+                                 "They have some problems walking about,
+                                 and are unable to wash or dress themselves. 
+                                 They have extreme pain or discomfort, 
+                                 but have no problems with self-care and are 
+                                 not anxious or depressed ", 
+                                 "They have some problems walking about, 
+                                 and are unable to wash or dress themselves. 
+                                 They have extreme pain or discomfort, but have 
+                                 no problems with self-care and are not
+                                 anxious or depressed ", 
                                  
-                                 "They have no problems walking about, with self-care or performinig usual activities. 
-                     They have extreme pain or discomfort. 
+                                 "They have no problems walking about, with self-care 
+                                 or performinig usual activities. 
+                    They have extreme pain or discomfort. 
                      They are moderately anxious or depressed", #0.601 health state
-                                 "They have no problems walking about, with self-care or performinig usual activities. 
+                                 "They have no problems walking about, with self-care 
+                                 or performinig usual activities. 
                      They have extreme pain or discomfort. 
                      They are moderately anxious or depressed",
-                                 "They have no problems walking about, with self-care or performinig usual activities. 
+                                 "They have no problems walking about, with self-care
+                                 or performinig usual activities. 
                      They have extreme pain or discomfort. 
                      They are moderately anxious or depressed",
-                                 "They have no problems walking about, with self-care or performinig usual activities. 
+                                 "They have no problems walking about, with self-care
+                                 or performinig usual activities. 
                      They have extreme pain or discomfort. 
                      They are moderately anxious or depressed",
-                                 "They have no problems walking about, with self-care or performinig usual activities. 
+                                 "They have no problems walking about, with self-care
+                                 or performinig usual activities. 
                      They have extreme pain or discomfort. 
                      They are moderately anxious or depressed",
                                  
-                                 "This is a description of a 0.8 health state", #0.8 health state
-                                 "This is a description of a 0.8 health state",
-                                 "This is a description of a 0.8 health state",
-                                 "This is a description of a 0.8 health state",
-                                 "This is a description of a 0.8 health state",
+                                 "They have no problems walking about, 
+                                 with self-care and are experiencing no pain
+                                 or discomfort. However, they have some problems
+                                 washing or dressing themselves and are 
+                                 moderately anxious or depressed ", #0.8 health state
+                                 "They have no problems walking about, 
+                                 with self-care and are experiencing no pain 
+                                 or discomfort. However, they have some problems
+                                 washing or dressing themselves and are
+                                 moderately anxious or depressed ",
+                                 "They have no problems walking about,
+                                 with self-care and are experiencing no pain or
+                                 discomfort. However, they have some problems 
+                                 washing or dressing themselves and are 
+                                 moderately anxious or depressed ",
+                                 "They have no problems walking about,
+                                 with self-care and are experiencing no pain or 
+                                 discomfort. However, they have some problems
+                                 washing or dressing themselves and are 
+                                 moderately anxious or depressed ",
+                                 "They have no problems walking about, 
+                                 with self-care and are experiencing no pain or
+                                 discomfort. However, they have some problems 
+                                 washing or dressing themselves and are 
+                                 moderately anxious or depressed ",
                                  
-                                 "This is a description of a 1 health state", #1 health state 
-                                 "This is a description of a 1 health state",
-                                 "This is a description of a 1 health state",
-                                 "This is a description of a 1 health state",
-                                 "This is a description of a 1 health state"
+                                 "They have no problems walking about, 
+                                 with self-care or performing usual activities.
+                                 They have no pain or discomfort and are not
+                                 anxious or depressed. ", #1 health state 
+                                 "They have no problems walking about,
+                                 with self-care or performing usual activities.
+                                 They have no pain or discomfort and are not 
+                                 anxious or depressed. ",
+                                 "They have no problems walking about, 
+                                 with self-care or performing usual activities. 
+                                 They have no pain or discomfort and are not 
+                                 anxious or depressed. ",
+                                 "They have no problems walking about, 
+                                 with self-care or performing usual activities.
+                                 They have no pain or discomfort and are not
+                                 anxious or depressed. ",
+                                 "They have no problems walking about,
+                                 with self-care or performing usual activities. 
+                                 They have no pain or discomfort and are not anxious or depressed. "
   )
   
   healthstate <-  list (0.2,0.2,0.2,0.2,0.2,
@@ -253,12 +327,12 @@ server <- function(input, output, session) {
         # Instruction Section
         div(class = "content-section", 
             style = "text-align: center; font-size: 16px; margin-bottom: 3px; 
-            padding: 8px; background-color: #f8f9fa; border-radius: 4px;",
+            padding: 8px; background-color: #f8f9fa; border-radius: 4px; font-weight : bold;",
             p("In the following questions, you will see a visual representation of 
         the trade-off you are making. In this example, there 
         are 20 people who will live for 5 years each in Option A, and in Option B, there 
         are 10 people who will live for 10 years each. The bar chart shows 
-        you how long each person will live in each option.  ")  
+        you how long each person will live in each option.")  
         ),  
         
         # Health State Description + Heart (Side-by-Side)
@@ -314,7 +388,7 @@ server <- function(input, output, session) {
         # Instruction Section
         div(class = "content-section", 
             style = "text-align: center; font-size: 16px; margin-bottom: 3px; 
-            padding: 8px; background-color: #f8f9fa; border-radius: 4px;",
+            padding: 8px; background-color: #f8f9fa; border-radius: 4px;font-weight: bold;",
             p("Now you can see a slider which you will use to show how many 
               people should benefit in Option B to make options A and B equally
               valuable. The stick figures are used to show you how many people
@@ -328,7 +402,7 @@ server <- function(input, output, session) {
             div(style = "flex: 1; min-width: 100px; display: flex; justify-content: flex-start;",
                 uiOutput("healthstate_heart")),
             # Text on the right
-            div(style = "flex: 3; text-align: left; font-size: 16px; font-weight: bold; background-color: #eef7ff; 
+            div(style = "flex: 3; text-align: left; font-size: 16px; background-color: #eef7ff; 
              padding: 6px; border-radius: 6px;",
                 p("In the survey, the level of health of each participant will 
            be varied. Here you will see a description of the level of 
