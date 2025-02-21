@@ -14,16 +14,53 @@
     people = rep(c(100, 50, 20, 5, 2), 5)
   )
   
-  healthstatedescriptor <- rep(
-    c("This is a description of a 0.2 health state",
-      "This is a description of a 0.4 health state",
-      "They have no problems walking about, with self-care or performing usual activities. 
-     They have extreme pain or discomfort. They are moderately anxious or depressed",
-      "This is a description of a 0.8 health state",
-      "This is a description of a 1 health state"), 5
+  healthstatedescriptor <- list ("This is a description of a 0.2 health state", #0.2 health state 
+                                 "This is a description of a 0.2 health state",
+                                 "This is a description of a 0.2 health state",
+                                 "This is a description of a 0.2 health state",
+                                 "This is a description of a 0.2 health state",
+                                 
+                                 "This is a description of a 0.4 health state", #0.4 health state
+                                 "This is a description of a 0.4 health state", 
+                                 "This is a description of a 0.4 health state", 
+                                 "This is a description of a 0.4 health state", 
+                                 "This is a description of a 0.4 health state", 
+                                 
+                                 "They have no problems walking about, with self-care or performinig usual activities. 
+                     They have extreme pain or discomfort. 
+                     They are moderately anxious or depressed", #0.601 health state
+                                 "They have no problems walking about, with self-care or performinig usual activities. 
+                     They have extreme pain or discomfort. 
+                     They are moderately anxious or depressed",
+                                 "They have no problems walking about, with self-care or performinig usual activities. 
+                     They have extreme pain or discomfort. 
+                     They are moderately anxious or depressed",
+                                 "They have no problems walking about, with self-care or performinig usual activities. 
+                     They have extreme pain or discomfort. 
+                     They are moderately anxious or depressed",
+                                 "They have no problems walking about, with self-care or performinig usual activities. 
+                     They have extreme pain or discomfort. 
+                     They are moderately anxious or depressed",
+                                 
+                                 "This is a description of a 0.8 health state", #0.8 health state
+                                 "This is a description of a 0.8 health state",
+                                 "This is a description of a 0.8 health state",
+                                 "This is a description of a 0.8 health state",
+                                 "This is a description of a 0.8 health state",
+                                 
+                                 "This is a description of a 1 health state", #1 health state 
+                                 "This is a description of a 1 health state",
+                                 "This is a description of a 1 health state",
+                                 "This is a description of a 1 health state",
+                                 "This is a description of a 1 health state"
   )
   
-  healthstate <- rep(c(0.2, 0.4, 0.6, 0.8, 1.0), 5)
+  healthstate <-  list (0.2,0.2,0.2,0.2,0.2,
+                        0.4,0.4,0.4,0.4,0.4,
+                        0.6,0.6,0.6,0.6,0.6,
+                        0.8,0.8,0.8,0.8,0.8,
+                        1.0,1.0,1.0,1.0,1.0)
+  
 }
 
 library(shiny)
@@ -137,19 +174,25 @@ server <- function(input, output, session) {
       tagList(
         div(style = "text-align: center; max-width: 800px; margin: auto;",
             h2("Welcome to the Survey"),
-            p("In this study, you will be asked to make decisions about how
+            p("In this study, you will be asked to make decisions about how 
               healthcare resources should be spread across different groups of 
               patients. These decisions involve trade-offs between the number of
-              patients receiving a treatment, and the number of years of 
-              additional life they will each get."),
-            p("In each question, there are two options, options A and B.
+              patients receiving a treatment, and the number of years they will
+              live for once they've had the treatment.", 
+              style = "font-size: 20px; margin-top: 20px;"),
+            p("In each question, there are two options: options A and B.
               In option A, you will be told how many people will get the treatment, 
-              and how long they will live for once they get it. For option B, 
-              the patients who get the treatment will live for 10 more years.
-              Your task is to decide how many patients will get this treatment so
-              that you think that option A and option B are equally valuable."),
-            p("The treatment will not change the patient’s quality of life but 
-              extends their life expectancy."),
+              and how long they will live for once they have had it. For option B, 
+              the patients who get the treatment will live for 10 more years. 
+              Patients who do not recieve the treatment will die immediately.
+              ", 
+              style = "font-size: 20px; margin-top: 20px;"),
+            p( "Your task is to decide how many patients should get the treatment so
+              that you think that option A and option B are equally valuable.", 
+               style = "font-size: 20px; margin-top: 20px; font-weight: bold;"),
+            p("The treatment will not change the patient’s quality of life,
+              it will only change how long they will live for.", 
+              style = "font-size: 20px; margin-top: 20px;"),
             actionButton("next1", "Next",
                          style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
         )
@@ -163,29 +206,34 @@ server <- function(input, output, session) {
             h2("Welcome to the Survey"),
             p("Before you start, please imagine you are in charge of a healthcare 
               budget for the country. It is your job to decide how best to 
-              distribute these life-extending treatments."),
+              distribute these life-extending treatments.",
+              style = "font-size: 20px; margin-top: 30px;"),
             p("There are 100 patients that need this treatment, and they are 
-              identical with respect to age and health condition."),
+              identical with respect to age and health condition.",
+              style = "font-size: 20px; margin-top: 20px;"),
             p("This task reflects real-world challenges in healthcare decision-making, 
               where resources are finite, and trade-offs must be considered. You must 
-              consider different factors, including:"),
+              consider different factors, including:",
+              style = "font-size: 20px; margin-top: 20px;"),
             
-            p("- Maximizing total life expectancy"),
-            p("- Treating the highest number of patients"),
-            p("- Or, a trade-off between the two."),
+            p("- Maximizing total life expectancy", style = "font-size: 20px; margin-top: 20px;"),
+            p("- Treating the highest number of patients", style = "font-size: 20px; margin-top: 20px;"),
+            p("- Or, a trade-off between the two.", style = "font-size: 20px; margin-top: 20px;"),
             
-            p("Key things to remember:"),
-            p("- You are in charge of the healthcare budget for the country"),
-            p("- There are 100 patients that need treatment, and they are all aged 20"),
-            p("- Those who do not receive this treatment will die immediately"),
+            p("Key things to remember:", style = "font-size: 20px; margin-top: 20px; font-weight: bold;"),
+            p("- You are in charge of the healthcare budget for the country", style = "font-size: 20px; margin-top: 20px;"),
+            p("- There are 100 patients that need treatment, and they are all aged 20", style = "font-size: 20px; margin-top: 20px;"),
+            p("- Those who do not receive this treatment will die immediately", style = "font-size: 20px; margin-top: 20px;"),
             
-            p("Please answer based on what you think is best for the country."),
+            p("Please answer based on what you think is best for the country.", style = "font-size: 20px; margin-top: 20px;"),
             
-            actionButton("start_examples", "Start Examples",  
-                         style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;"),
-            
-            actionButton("Back", "Back",  
-                         style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
+            div(style = "display: flex; justify-content: center; gap: 20px; margin-top: 20px;",
+                actionButton("start_examples", "Start Examples",  
+                             style = "font-size: 18px; padding: 10px 20px;"),
+                
+                actionButton("Back", "Back",  
+                             style = "font-size: 18px; padding: 10px 20px;")
+            )
         )
       )
       
@@ -207,10 +255,10 @@ server <- function(input, output, session) {
             style = "text-align: center; font-size: 16px; margin-bottom: 3px; 
             padding: 8px; background-color: #f8f9fa; border-radius: 4px;",
             p("In the following questions, you will see a visual representation of 
-        the trade-off you are making. In this example, in Option A, there 
-        are 20 people who will live for 5 years each, and in Option B, there 
-        are 10 people who will live for 10 years each. The bar chart will show 
-        you how long each person will live in each option.")  
+        the trade-off you are making. In this example, there 
+        are 20 people who will live for 5 years each in Option A, and in Option B, there 
+        are 10 people who will live for 10 years each. The bar chart shows 
+        you how long each person will live in each option.  ")  
         ),  
         
         # Health State Description + Heart (Side-by-Side)
@@ -224,7 +272,8 @@ server <- function(input, output, session) {
         padding: 6px; border-radius: 6px;",
                 p("In the survey, the level of health of each participant will 
            be varied. Here you will see a description of the level of 
-           health for each participant.")
+           health for each participant. On a scale of 0 to 100%,
+              the imagine to the left will show you how healthy the individual is.")
             )
         ),
         
@@ -283,7 +332,8 @@ server <- function(input, output, session) {
              padding: 6px; border-radius: 6px;",
                 p("In the survey, the level of health of each participant will 
            be varied. Here you will see a description of the level of 
-           health for each participant."))
+           health for each participant. On a scale of 0 to 100%,
+              the imagine to the left will show you how healthy the individual is"))
         ),
         
         # Bar Chart Section
@@ -537,9 +587,9 @@ s
   
   # Action when "Yes, Continue" is clicked
   observeEvent(input$yes_continue, {
-    if (survey_page() < length(optionA$page)) {
-      survey_page(survey_page() + 1)
-      removeModal()  # Close the modal dialog
+    if (survey_page() < length(optionA$gains)) {
+      survey_page(survey_page() + 1)  # Correctly increment survey question index
+      removeModal()  
       showNotification("You have confirmed your response")
       updateSliderInput(session, "no_people", value = 1)  # Reset the slider
     } else {
