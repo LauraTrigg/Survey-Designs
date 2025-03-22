@@ -9,66 +9,50 @@
 
 #Input lists   
 {
-  # Input Lists
+  #Input Lists
   #Full list
-  #optionA <- list(
-  #  gains = c(10, 2, 2, 20, 20, 1, 1, 5, 0.5, 5, 0.75, 0.75, 0.5, 0.5, 2, 5, 5, 2, 20, 0.5, 1, 0.75, 0.5, 0.75, 2, 20, 1, 20, 0.75, 5, 1),
-  #  people = c(10, 50, 50, 5, 5, 100, 100, 20, 200, 20, 150, 150, 200, 200, 50, 20, 200, 50, 5, 200, 100, 150, 200, 150, 50, 5, 100, 5, 150, 20, 100)
-  #)
+  optionA <- list(
+    gains = c(10, 2, 2, 20, 20, 1, 1, 5, 0.5, 5, 0.75, 0.75, 0.5, 0.5, 2, 5, 5, 2, 20, 0.5, 1, 0.75, 0.5, 0.75, 2, 20, 1, 20, 0.75, 5, 1),
+    people = c(10, 50, 50, 5, 5, 100, 100, 20, 200, 20, 150, 150, 200, 200, 50, 20, 200, 50, 5, 200, 100, 150, 200, 150, 50, 5, 100, 5, 150, 20, 100)
+  )
   
-  #healthstatedescriptor <- list(
-  #  "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-  #  "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-  #  "They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
-  #  "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #  "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  # "They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed",
-  #  "They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed",
-  #  "They are confined to bed, and are unable to perform usual activities. They have moderate pain or discomfort, and are moderately anxious or depressed. However, they have no problems with self care",
-  #  "They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
-  #  "They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed",
-  #  "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #  "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #  "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-  #  "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-  #  "They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
-  #  "They are confined to bed, and are unable to perform usual activities. They have moderate pain or discomfort, and are moderately anxious or depressed. However, they have no problems with self care",
-  #  "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-  #  "They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
-  #  "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #  "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-  #  "They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed",
-  #  "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #  "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-  #  "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #  "They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
-  #  "They are confined to bed, and are unable to perform usual activities. They have moderate pain or discomfort, and are moderately anxious or depressed. However, they have no problems with self care",
-  #  "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #  "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #  "They are confined to bed, and are unable to perform usual activities. They have moderate pain or discomfort, and are moderately anxious or depressed. However, they have no problems with self care",
-  #  "They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed"
-  #)
+  healthstatedescriptor <- list(
+    "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
+    "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
+    "They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
+    "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
+    "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
+   "They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed",
+    "They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed",
+    "They are confined to bed, and are unable to perform usual activities. They have moderate pain or discomfort, and are moderately anxious or depressed. However, they have no problems with self care",
+    "They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
+    "They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed",
+    "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
+    "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
+    "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
+    "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
+    "They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
+    "They are confined to bed, and are unable to perform usual activities. They have moderate pain or discomfort, and are moderately anxious or depressed. However, they have no problems with self care",
+    "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
+    "They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
+    "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
+    "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
+    "They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed",
+    "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
+    "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
+    "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
+    "They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
+    "They are confined to bed, and are unable to perform usual activities. They have moderate pain or discomfort, and are moderately anxious or depressed. However, they have no problems with self care",
+    "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
+    "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
+    "They are confined to bed, and are unable to perform usual activities. They have moderate pain or discomfort, and are moderately anxious or depressed. However, they have no problems with self care",
+    "They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed"
+  )
   
-  #healthstate <- list(
-  #  0.965,0.965, 0.601, 0.8, 0.601, 0.408, 0.408, 0.198, 0.601, 0.408, 0.8,0.8, 0.965, 0.965, 0.601, 0.198, 0.965, 0.601, 0.8, 0.965, 0.408, 0.8, 0.965, 0.8, 0.601, 0.198, 0.408, 0.198, 0.8, 0.198, 0.408
-  #)
+  healthstate <- list(
+    0.965,0.965, 0.601, 0.8, 0.601, 0.408, 0.408, 0.198, 0.601, 0.408, 0.8,0.8, 0.965, 0.965, 0.601, 0.198, 0.965, 0.601, 0.8, 0.965, 0.408, 0.8, 0.965, 0.8, 0.601, 0.198, 0.408, 0.198, 0.8, 0.198, 0.408
+  )
 } #longlist 
-
-{
-optionA <- list(
-  gains = c(10, 2),
-  people = c(10, 50)
-)
-
-healthstatedescriptor <- list(
-  "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-  "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed."
-)
-
-healthstate <- list(
-  0.965,0.601
-)
-} #shortlist
 
 library(shiny)
 
@@ -157,8 +141,6 @@ ui <- fluidPage(
   uiOutput("page_content")
 )
 
-
-
 server <- function(input, output, session) {
   
   page <- reactiveVal(1)
@@ -195,10 +177,13 @@ server <- function(input, output, session) {
             rank_list(
               text = "Drag to rank:",
               labels = c(
-                "Option A: 10 people gain 5 years",
-                "Option B: 20 people gain 2 years",
-                "Option C: 5 people gain 15 years",
-                "Option D: 40 people gain 1 year"
+                "200 people live for an extra 6 months",
+                "150 people live for an extra 9 months",
+                "100 people live for an extra year",
+                "50 people live for an extra 2 years",
+                "20 people live for an extra 5 years",
+                "10 people live for an extra 10 years",
+                "5 people live for an extra 20 years"
               ),
               input_id = "ranking_result"
             )
@@ -492,7 +477,6 @@ server <- function(input, output, session) {
     }
   })
 
-
   output$page_number <- renderUI({
     div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
         paste("Question", survey_page()))
@@ -658,32 +642,6 @@ server <- function(input, output, session) {
   observeEvent(input$submit_ranking, {
     endofsurvey(TRUE)
   })
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   }
 
