@@ -12,47 +12,19 @@ library(sortable)
   #Input Lists
   #Full list
   optionA <- list(
-    gains = c(10, 2, 2, 20),
+    gains = c(5, 10, 2, 2, 20),
     #20, 1, 1, 5, 0.5, 5, 0.75, 0.75, 0.5, 0.5, 2, 5, 5, 2, 20, 0.5, 1, 0.75, 0.5, 0.75, 2, 20, 1, 20, 0.75, 5, 1
-    people = c(10, 50, 50, 5)
+    people = c(20, 10, 50, 50, 5)
     #5, 100, 100, 20, 200, 20, 150, 150, 200, 200, 50, 20, 200, 50, 5, 200, 100, 150, 200, 150, 50, 5, 100, 5, 150, 20, 100
   )
   
   healthstatedescriptor <- list(
-    "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-    "They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-    "They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
-    "They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed"
+    "A","B", "C","D"
       )
-  #"They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #"They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed",
-  #"They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed",
-  #"They are confined to bed, and are unable to perform usual activities. They have moderate pain or discomfort, and are moderately anxious or depressed. However, they have no problems with self care",
-  #"They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
-  #"They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed",
-  #"They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #"They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #"They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-  #"They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-  #"They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
-  #"They are confined to bed, and are unable to perform usual activities. They have moderate pain or discomfort, and are moderately anxious or depressed. However, they have no problems with self care",
-  #"They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-  #"They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
-  #"They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #"They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-  #"They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed",
-  #"They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #"They have no problems walking about, with self-care or performing usual activities. They have no pain or discomfort and are not anxious or depressed.",
-  #"They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #"They have no problems walking about, with self-care or performing usual activities. They have extreme pain or discomfort. They are moderately anxious or depressed",
-  #"They are confined to bed, and are unable to perform usual activities. They have moderate pain or discomfort, and are moderately anxious or depressed. However, they have no problems with self care",
-  #"They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #"They have no problems walking about, with self-care and are experiencing no pain or discomfort. However, they have some problems washing or dressing themselves and are moderately anxious or depressed",
-  #"They are confined to bed, and are unable to perform usual activities. They have moderate pain or discomfort, and are moderately anxious or depressed. However, they have no problems with self care",
-  #"They have some problems walking about, and are unable to wash or dress themselves. They have extreme pain or discomfort, but have no problems with self-care and are not anxious or depressed"
+
   
   healthstate <- list(
-    0.965, 0.965, 0.601, 0.8
+    1, 1, 1, 0.6, 0.8
   )
   # 0.601, 0.408, 0.408, 0.198, 0.601, 0.408, 0.8,0.8, 0.965, 0.965, 0.601, 0.198, 0.965, 0.601, 0.8, 0.965, 0.408, 0.8, 0.965, 0.8, 0.601, 0.198, 0.408, 0.198, 0.8, 0.198, 0.408
   
@@ -218,27 +190,24 @@ server <- function(input, output, session) {
       tagList(
         div(style = "text-align: center; max-width: 800px; margin: auto;",
             h2("Welcome to the Survey"),
-            p("In this study, you will be asked to make decisions about how 
-              healthcare resources should be spread across different groups of 
-              patients. These decisions involve balancing the number of
-              patients receiving a treatment, and the number of years they will
-              live for once they've had the treatment.", 
+            p("In this survey, you will help decide how to give out a life-saving treatment.",
               style = "font-size: 20px; margin-top: 20px;"),
-            p("In each question, there are two options: options A and B.
-              In option A, you will be told how many people will get the treatment, 
-              and how long they will live for once they have had it. For option B, 
-              the patients who get the treatment will live for 10 more years. 
-              After the treatment has stopped working, the patient will die.
-              Patients who do not recieve the treatment will die immediately.
-              ", 
+            
+            p("Each question gives you two choices: Option A and Option B.",
               style = "font-size: 20px; margin-top: 20px;"),
-            p( "Your task is to decide how many patients should get the treatment so
-              that you think that option A and option B are equally valuable.", 
-               style = "font-size: 20px; margin-top: 20px; font-weight: bold;"),
-            p("The treatment will not change the patient’s quality of life,
-              it will only change how long they will live for.", 
+            
+            p("Option A shows how many people get the treatment and how many extra years they will live.",
               style = "font-size: 20px; margin-top: 20px;"),
-            actionButton("next1", "Next",
+            
+            p("In Option B, everyone who gets the treatment lives 10 more years. Anyone who doesn’t get it will die right away.",
+              style = "font-size: 20px; margin-top: 20px;"),
+            
+            p("Your job is to choose how many people should get the treatment in Option B so that both options feel equally fair or valuable.",
+              style = "font-size: 20px; margin-top: 20px; font-weight: bold;"),
+            
+            p("The treatment doesn’t make people feel better. It only adds extra years to their life.",
+              style = "font-size: 20px; margin-top: 20px;"),
+                        actionButton("next1", "Next",
                          style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
         )
       )
@@ -249,30 +218,31 @@ server <- function(input, output, session) {
       tagList(
         div(style = "text-align: center; max-width: 800px; margin: auto;",
             h2("Welcome to the Survey"),
-            p("Before you start, please imagine you are in charge of a healthcare 
-              budget for the country. It is your job to decide how best to 
-              distribute these life-extending treatments.",
+            p("Before we begin, imagine you're in charge of the country’s healthcare budget.",
               style = "font-size: 20px; margin-top: 30px;"),
-            p("There are 200 patients that need this treatment, they are all
-              20 years old and they are identical with respect to age and
-              health condition.",
-              style = "font-size: 20px; margin-top: 20px;"),
-            p("This task reflects real-world challenges in healthcare decision-making, 
-              where resources are finite, and the balance between the number of 
-              people and the increase in life expectancy must be considered. 
-              You must think about different factors, including:",
+            
+            p("You have 200 patients who need a life-saving treatment. They are all 20 years old and in the same health.",
               style = "font-size: 20px; margin-top: 20px;"),
             
-            p("- Maximizing total life expectancy", style = "font-size: 20px; margin-top: 20px;"),
-            p("- Treating the highest number of patients", style = "font-size: 20px; margin-top: 20px;"),
-            p("- Or, a balance between the two.", style = "font-size: 20px; margin-top: 20px;"),
+            p("You need to decide how to use this treatment in the best way possible.",
+              style = "font-size: 20px; margin-top: 20px;"),
             
-            p("Key things to remember:", style = "font-size: 20px; margin-top: 20px; font-weight: bold;"),
-            p("- You are in charge of the healthcare budget for the country", style = "font-size: 20px; margin-top: 20px;"),
-            p("- There are 200 patients that need treatment, and they are all aged 20", style = "font-size: 20px; margin-top: 20px;"),
-            p("- Those who do not receive this treatment will die immediately", style = "font-size: 20px; margin-top: 20px;"),
+            p("In each question, think about how to balance these things:",
+              style = "font-size: 20px; margin-top: 20px;"),
             
-            p("Please answer based on what you think is best for the country.", style = "font-size: 20px; margin-top: 20px;"),
+            p("- Giving treatment to the most people", style = "font-size: 20px; margin-top: 20px;"),
+            p("- Helping people live longer", style = "font-size: 20px; margin-top: 20px;"),
+            p("- Or finding a fair balance between both", style = "font-size: 20px; margin-top: 20px;"),
+            
+            p("Important things to know:", style = "font-size: 20px; margin-top: 20px; font-weight: bold;"),
+            
+            p("- You are in charge of how the treatment is given out", style = "font-size: 20px; margin-top: 20px;"),
+            p("- There are 200 patients who are 20 years old", style = "font-size: 20px; margin-top: 20px;"),
+            p("- If someone doesn’t get the treatment, they will die immediately", style = "font-size: 20px; margin-top: 20px;"),
+            
+            p("Please make each decision based on what you think is best for the country.",
+              style = "font-size: 20px; margin-top: 20px;"),
+            
             
             div(style = "display: flex; justify-content: center; gap: 20px; margin-top: 20px;",
                 actionButton("start_examples", "Start Examples",  
@@ -288,148 +258,124 @@ server <- function(input, output, session) {
     #Example page 1
     else if (page() == 3) {
       tagList(
-        
         # Centered Title Panel
-        titlePanel(div("Person Trade-Off Exercise", class = "content-section", 
-                       style = "text-align: center; font-weight: bold; font-size: 24px; color: #333; margin-bottom: 5px;")),
-        
-        # Page Number Display
-        div(class = "content-section", style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 2px; margin-bottom: 5px;",
-            uiOutput("page_number")),
-        
-        # Instruction Section
         div(class = "content-section", 
-            style = "text-align: center; font-size: 16px; margin-bottom: 3px; 
-            padding: 8px; background-color: #f8f9fa; border-radius: 4px; font-weight : bold;",
-            p("In the following questions, you will see a visual representation of 
-        the trade-off you are making. In this example, there 
-        are 20 people who will live for 5 years each in Option A, and in Option B, there 
-        are 10 people who will live for 10 years each. The bar chart shows 
-        you how long each person will live in each option.")  
-        ),  
+            style = "text-align: center; font-weight: bold; font-size: 32px; color: #333; margin-bottom: 10px;",
+            "Example"
+        ),
         
-        # Health State Description + Heart (Side-by-Side)
-        div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 3px;",
-            # Heart on the left
-            div(style = "flex: 1; min-width: 100px; display: flex; justify-content: flex-start;",
-                uiOutput("healthstate_heart")),
-            
-            # Text on the right
-            div(style = "flex: 3; text-align: left; font-size: 16px; font-weight: bold; background-color: #eef7ff; 
-        padding: 6px; border-radius: 6px;",
-                p("In the survey, the level of health of each participant will 
-           be varied. Here you will see a description of the level of 
-           health for each participant. On a scale of 0 to 100%,
-              the imagine to the left will show you how healthy the individual is.")
+        # Instructions
+        div(class = "content-section", 
+            style = "text-align: center; font-size: 16px; margin-bottom: 8px; padding: 6px; background-color: #f8f9fa; border-radius: 4px;",
+            p("Here’s a quick example to show how the survey works."),
+            p("You’ll see two treatment options. In this example, Option A means 20 people live for 5 more years each. Option B means 10 people live for 10 more years each."),
+            p("The chart below shows how long each person lives under each option.")
+        ),
+        
+        # Health State Visual
+        div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 10px;",
+            div(style = "flex: 1; display: flex; justify-content: center;",
+                uiOutput("healthstate_heart")
+            ),
+            div(style = "flex: 10; text-align: center; font-size: 16px; background-color: #eef7ff; padding: 6px 8px; border-radius: 6px; margin-left: 6px;",
+                p("Health is shown on a scale from 0 to 100."),
+                p(paste("In this example, all patients have a health score of", healthstate[[survey_page()]] * 100, "%."))
             )
         ),
         
-        # Bar Chart Section
-        div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 15px;",
-            plotOutput('plot', height = "370px", width = "100%")),  # Reduced height
-        
-        # Side-by-side Option A and B Descriptions
-        div(class = "content-section", 
-            style = "display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 15px;",
-            div(class = "option-box", style = "background-color: peachpuff; padding: 1px;", 
-                strong("Option A"), br(), 
-                uiOutput("discription_of_option_A")),
-            div(class = "option-box", style = "background-color: darkseagreen; padding: 10px;", 
-                strong("Option B"), br(),
-                p("10 people will gain 10 years of life each"))
+        # Bar Chart
+        div(class = "chart-container", style = "margin-bottom: 10px;",
+            plotOutput('plot', height = "220px", width = "100%")
         ),
         
-        actionButton("next2", "Next",
-                     style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;"),
-        actionButton("Back", "Back",  
-                     style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
+        # Option Descriptions
+        div(class = "content-section", style = "display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 10px;",
+            div(class = "option-box", style = "background-color: peachpuff;", 
+                strong("Option A"), br(), uiOutput("discription_of_option_A")
+            ),
+            div(class = "option-box", style = "background-color: darkseagreen;", 
+                strong("Option B"), br(), p("10 people will gain 10 years of life each")
+            )
+        ),
         
+        # Navigation Buttons
+        div(style = "text-align: center; margin-top: 10px;",
+            actionButton("next2", "Next", style = "font-size: 16px; padding: 8px 20px; margin-right: 10px;"),
+            actionButton("Back", "Back", style = "font-size: 16px; padding: 8px 20px;")
+        )
       )
-    } 
-    #Example page 2
+    }
+    
+        #Example page 2
     else if (page() == 4) {
       tagList(
-        
-        # Centered Title Panel
-        titlePanel(div("Person Trade-Off Exercise", class = "content-section", 
-                       style = "text-align: center; font-weight: bold; font-size: 24px; color: #333; margin-bottom: 5px;")),
-        
-        # Page Number Display
-        div(class = "content-section", style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 2px; margin-bottom: 5px;",
-            uiOutput("page_number")),
-        
-        # Instruction Section
         div(class = "content-section", 
-            style = "text-align: center; font-size: 16px; margin-bottom: 3px; 
-            padding: 8px; background-color: #f8f9fa; border-radius: 4px;font-weight: bold;",
-            p("Now you can see a slider which you will use to show how many 
-              people should benefit in Option B to make options A and B equally
-              valuable. The stick figures are used to show you how many people
-              will benefit from the treatment. Practice using the slider 
-              to change the number of people that will recieve treatment 
-              in Option B")),  
-        
-        # Health State Description + Heart (Side-by-Side)
-        div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 3px;",
-            # Heart on the left
-            div(style = "flex: 1; min-width: 100px; display: flex; justify-content: flex-start;",
-                uiOutput("healthstate_heart")),
-            # Text on the right
-            div(style = "flex: 3; text-align: left; font-size: 16px; background-color: #eef7ff; 
-             padding: 6px; border-radius: 6px;",
-                p("In the survey, the level of health of each participant will 
-           be varied. Here you will see a description of the level of 
-           health for each participant. On a scale of 0 to 100%,
-              the imagine to the left will show you how healthy the individual is"))
+            style = "text-align: center; font-weight: bold; font-size: 32px; color: #333; margin-bottom: 10px;",
+            "Example"
         ),
         
-        # Bar Chart Section
-        div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 15px;",
-            plotOutput('plot', height = "370px", width = "100%")),  # Reduced height
-        
-        # Side-by-side Option A and B Descriptions
+        # Instructions
         div(class = "content-section", 
-            style = "display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 15px;",
-            div(class = "option-box", style = "background-color: peachpuff; padding: 1px;", 
-                strong("Option A"), br(), 
-                uiOutput("discription_of_option_A")),
-            div(class = "option-box", style = "background-color: darkseagreen; padding: 10px;", 
-                strong("Option B"), br(),
-                uiOutput("discription_of_option_B"))
+            style = "text-align: center; font-size: 16px; margin-bottom: 8px; padding: 6px; background-color: #f8f9fa; border-radius: 4px;",
+            p("Now use the slider below to adjust how many people should be treated in Option B to make it equally valuable to Option A."),
+            p("The stick figures show how many people benefit from the treatment.")
         ),
         
-        # Stickmen Display Section
-        div(class = "stickmen-container", style = "margin-bottom: 20px; gap: 70px;",
+        # Health State + Scale
+        div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 10px;",
+            div(style = "flex: 1; display: flex; justify-content: center;",
+                uiOutput("healthstate_heart")
+            ),
+            div(style = "flex: 10; text-align: center; font-size: 16px; background-color: #eef7ff; padding: 6px 8px; border-radius: 6px; margin-left: 6px;",
+                p("Health is shown on a scale from 0 to 100."),
+                p(paste("In this example, all patients have a health score of", healthstate[[survey_page()]] * 100, "%."))
+            )
+        ),
+        
+        # Bar Chart
+        div(class = "chart-container", style = "margin-bottom: 10px;",
+            plotOutput('plot', height = "220px", width = "100%")
+        ),
+        
+        # Option Descriptions
+        div(class = "content-section", style = "display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 10px;",
+            div(class = "option-box", style = "background-color: peachpuff;", 
+                strong("Option A"), br(), uiOutput("discription_of_option_A")
+            ),
+            div(class = "option-box", style = "background-color: darkseagreen;", 
+                strong("Option B"), br(), uiOutput("discription_of_option_B")
+            )
+        ),
+        
+        # Stickmen Display
+        div(class = "stickmen-container", style = "margin-bottom: 10px; gap: 40px;",
             div(class = "stickmen-box", uiOutput("stickmen_display_A")),
             div(class = "stickmen-box", uiOutput("stickmen_display_B"))
         ),
         
-        # Slider Input
-        div(class = "content-section", style = "text-align: center; margin-bottom: 20px;",
+        # Slider
+        div(class = "content-section", style = "text-align: center; margin-bottom: 10px;",
             sliderInput("no_people", "Number of People Benefiting from Option B", 
-                        min = 1, max = 100, value = 1, width = "100%")),
+                        min = 1, max = 100, value = 1, width = "100%")
+        ),
         
-
-        div(class = "content-section", style = "text-align: center; margin-bottom: 5px;",
+        # Buttons
+        div(class = "content-section", style = "text-align: center; margin-bottom: 10px;",
             actionButton("start_survey", "Start Survey", class = "btn btn-primary btn-md", 
-                         style = "padding: 10px 25px; font-size: 16px;")),
-        
-        actionButton("Back", "Back",  
-                     style = "font-size: 18px; padding: 10px 20px; margin-top: 20px;")
+                         style = "padding: 8px 20px; font-size: 16px; margin-right: 10px;"),
+            actionButton("Back", "Back", style = "font-size: 16px; padding: 8px 20px;")
+        )
       )
     }
+    
     #Survey page
     else {
       
       tagList(
         
         # Centered Title Panel
-        titlePanel(div("Person Trade-Off Exercise", class = "content-section", 
-                       style = "text-align: center; font-weight: bold; font-size: 24px; color: #333; margin-bottom: 5px;")),
-        
-        # Page Number Display
-        div(class = "content-section", style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 2px; margin-bottom: 5px;",
-            uiOutput("page_number")),
+        titlePanel(div(uiOutput("page_number"), class = "content-section", 
+                       )),
         
         # Instruction Section
         div(class = "content-section", 
@@ -485,38 +431,55 @@ server <- function(input, output, session) {
   })
 
   output$page_number <- renderUI({
-    div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
+    div(style = "text-align: center; font-size: 20px; font-weight: bold; margin-top: 10px;",
         paste("Question", survey_page()))
   }) 
   
-  #Text for the health state
-  output$healthstate_text <- renderUI({
-    div(style = "text-align: center; font-size: 16px; font-weight: bold; margin-top: 10px;",
-        paste("All patients have the following health conditions: ", healthstatedescriptor[[survey_page()]]))
-  })
-  
-  # Rendering and filling in the rectangle for health states 
+  #Picture for health state
   output$healthstate_heart <- renderUI({
-    health_state <- healthstate[[survey_page()]]  # Get current health state (0.2, 0.4, etc.)
-    fill_percentage <- health_state * 100  # Convert to percentage (e.g., 0.6 -> 60%)
+    health_state <- healthstate[[survey_page()]]
+    fill_percentage <- round(health_state * 100)
     
-    # Convert fill percentage into correct Y-position and height
-    total_height <- 24  # Total SVG height
-    total_width <- 20   # Total SVG width
-    fill_height <- round((fill_percentage / 100) * total_height, 2)  # Rounded fill height
-    fill_y <- total_height - fill_height  # Start filling from the bottom
+    total_height <- 80
+    fill_height <- round(health_state * total_height)
+    fill_y <- total_height - fill_height
     
-    rectangle_svg <- sprintf("
-  <svg viewBox='0 0 24 24' width='110' height='110' xmlns='http://www.w3.org/2000/svg'>
-    <!-- Rectangle Outline -->
-    <rect x='0' y='0' width='24' height='24' stroke='black' stroke-width='1.2' fill='none' />
+    fill_color <- if (health_state > 0.7) {
+      "#4CAF50"  # green
+    } else if (health_state > 0.4) {
+      "#FFC107"  # amber
+    } else {
+      "#F44336"  # red
+    }
     
-    <!-- Filling Rectangle -->
-    <rect x='0' y='%f' width='24' height='%f' fill='red' opacity='1' />
-  </svg>", fill_y, fill_height)
+    # Create 10 tick marks and hide last
+    tick_positions <- seq(10, 90, by = 10)
+    visible_ticks <- tick_positions[1:9] 
     
-    div(style = "text-align: center; margin: 20px 0;",  # 20px top & bottom margin
-        HTML(rectangle_svg))  # Insert the rectangle SVG
+    tick_lines <- paste(sapply(visible_ticks, function(pct) {
+      y <- 10 + (80 - (pct / 100) * 80)  # Map 0–100 to 10–90 SVG y-range
+      sprintf('<line x1="20" y1="%f" x2="23" y2="%f" stroke="#333" stroke-width="1"/>', y, y)
+    }), collapse = "\n")
+    
+    svg_html <- sprintf('
+  <svg viewBox="0 0 60 100" width="80" height="160" xmlns="http://www.w3.org/2000/svg">
+    <!-- Container outline -->
+    <rect x="20" y="10" width="20" height="80" rx="6" ry="6" stroke="#000" stroke-width="2" fill="none"/>
+
+    <!-- Fill rectangle clipped to health state -->
+    <clipPath id="clip_fill">
+      <rect x="20" y="%f" width="20" height="%f"/>
+    </clipPath>
+    <rect x="20" y="10" width="20" height="80" rx="6" ry="6" fill="%s" clip-path="url(#clip_fill)" />
+
+    <!-- Tick marks (excluding top and bottom) -->
+    %s
+  </svg>',
+                        10 + fill_y, fill_height, fill_color, tick_lines
+    )
+    
+    div(style = "text-align: center; margin: 10px 0;",
+        HTML(svg_html))
   })
   
   #Render the bar chart
@@ -538,7 +501,7 @@ server <- function(input, output, session) {
       geom_text(aes(label = Gains), vjust = -0.3, size = 6, fontface = "bold") +  
       scale_fill_manual(values = c("peachpuff", "darkseagreen")) +  # Custom colors
       scale_y_continuous(breaks = seq(0, max_y, by = 1), limits = c(0, max_y)) +  
-      labs(title = "Gains Per Person", 
+      labs(title = "Extra years per patient", 
            x = "", 
            y = "") +
       theme_minimal(base_size = 14) +  # Cleaner look
