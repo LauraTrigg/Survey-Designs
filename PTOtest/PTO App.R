@@ -24,7 +24,7 @@ library(sortable)
 
   
   healthstate <- list(
-    1, 1, 1, 0.6, 0.8
+    1, 1, 0.2, 0.6, 0.8
   )
   # 0.601, 0.408, 0.408, 0.198, 0.601, 0.408, 0.8,0.8, 0.965, 0.965, 0.601, 0.198, 0.965, 0.601, 0.8, 0.965, 0.408, 0.8, 0.965, 0.8, 0.601, 0.198, 0.408, 0.198, 0.8, 0.198, 0.408
   
@@ -217,7 +217,7 @@ server <- function(input, output, session) {
     else if (page() == 2) {
       tagList(
         div(style = "text-align: center; max-width: 800px; margin: auto;",
-            h2("Welcome to the Survey"),
+            h2("Before You Start"),
             p("Before we begin, imagine you're in charge of the country’s healthcare budget.",
               style = "font-size: 20px; margin-top: 30px;"),
             
@@ -278,14 +278,14 @@ server <- function(input, output, session) {
                 uiOutput("healthstate_heart")
             ),
             div(style = "flex: 10; text-align: center; font-size: 16px; background-color: #eef7ff; padding: 6px 8px; border-radius: 6px; margin-left: 6px;",
-                p("Health is shown on a scale from 0 to 100."),
+                p("Health is shown on a scale from 0 to 100%."),
                 p(paste("In this example, all patients have a health score of", healthstate[[survey_page()]] * 100, "%."))
             )
         ),
         
         # Bar Chart
         div(class = "chart-container", style = "margin-bottom: 10px;",
-            plotOutput('plot', height = "220px", width = "100%")
+            plotOutput('plot', height = "250px", width = "100%")
         ),
         
         # Option Descriptions
@@ -305,8 +305,7 @@ server <- function(input, output, session) {
         )
       )
     }
-    
-        #Example page 2
+    #Example page 2
     else if (page() == 4) {
       tagList(
         div(class = "content-section", 
@@ -327,14 +326,14 @@ server <- function(input, output, session) {
                 uiOutput("healthstate_heart")
             ),
             div(style = "flex: 10; text-align: center; font-size: 16px; background-color: #eef7ff; padding: 6px 8px; border-radius: 6px; margin-left: 6px;",
-                p("Health is shown on a scale from 0 to 100."),
-                p(paste("In this example, all patients have a health score of", healthstate[[survey_page()]] * 100, "%."))
+                p("Health is shown on a scale from 0 to 100%."),
+                p(paste("In this example, all patients have a health score of", healthstate[[survey_page()]] * 100,"%."))
             )
         ),
         
         # Bar Chart
         div(class = "chart-container", style = "margin-bottom: 10px;",
-            plotOutput('plot', height = "220px", width = "100%")
+            plotOutput('plot', height = "250px", width = "100%")
         ),
         
         # Option Descriptions
@@ -353,10 +352,10 @@ server <- function(input, output, session) {
             div(class = "stickmen-box", uiOutput("stickmen_display_B"))
         ),
         
-        # Slider
+        # Slider Input
         div(class = "content-section", style = "text-align: center; margin-bottom: 10px;",
             sliderInput("no_people", "Number of People Benefiting from Option B", 
-                        min = 1, max = 100, value = 1, width = "100%")
+                        min = 0, max = 20, value = 10, width = "100%")
         ),
         
         # Buttons
@@ -367,7 +366,6 @@ server <- function(input, output, session) {
         )
       )
     }
-    
     #Survey page
     else {
       
@@ -385,20 +383,20 @@ server <- function(input, output, session) {
             how many people should receive 10 years for Programme B to be equally valuable as 
             Programme A.")),  
         
-        # Health State Description + Heart (Side-by-Side)
-        div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 3px;",
-            # Heart on the left
-            div(style = "flex: 1; min-width: 100px; display: flex; justify-content: flex-start;",
-                uiOutput("healthstate_heart")),
-            # Text on the right
-            div(style = "flex: 3; text-align: left; font-size: 16px; font-weight: bold; background-color: #eef7ff; 
-             padding: 6px; border-radius: 6px;",
-                uiOutput("healthstate_text"))
+        # Health State + Scale
+        div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 10px;",
+            div(style = "flex: 1; display: flex; justify-content: center;",
+                uiOutput("healthstate_heart")
+            ),
+            div(style = "flex: 10; text-align: center; font-size: 16px; background-color: #eef7ff; padding: 6px 8px; border-radius: 6px; margin-left: 6px;",
+                p("Health is shown on a scale from 0 to 100."),
+                p(paste("All patients have a health score of", healthstate[[survey_page()]] * 100, "%."))
+            )
         ),
         
         # Bar Chart Section
         div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 15px;",
-            plotOutput('plot', height = "370px", width = "100%")),  # Reduced height
+            plotOutput('plot', height = "250px", width = "100%")),  # Reduced height
         
         # Side-by-side Option A and B Descriptions
         div(class = "content-section", 
@@ -420,7 +418,7 @@ server <- function(input, output, session) {
         # Slider Input
         div(class = "content-section", style = "text-align: center; margin-bottom: 20px;",
             sliderInput("no_people", "Number of People Benefiting from Option B", 
-                        min = 1, max = 100, value = 1, width = "100%")),
+                        min = 0, max = 20, value = 10, width = "100%")),
         
         # Submit Button
         div(class = "content-section", style = "text-align: center; margin-bottom: 5px;",
@@ -553,6 +551,10 @@ server <- function(input, output, session) {
   
   #Render the stickmen for option B
   output$stickmen_display_B <- renderUI({
+    if (input$no_people == 0) {
+      return(div(style = "width: 100%; height: 100%;"))  # Empty box
+    }
+    
     box_width <- 300
     box_height <- 300
     cols <- ceiling(sqrt(input$no_people))
@@ -561,18 +563,23 @@ server <- function(input, output, session) {
     stickman_height <- box_height / rows * 0.9
     
     stickman_svg <- sprintf("<svg width='%f' height='%f' viewBox='0 0 30 60' xmlns='http://www.w3.org/2000/svg'>
-      <circle cx='15' cy='10' r='5' stroke='black' stroke-width='2' fill='none'/>
-      <line x1='15' y1='15' x2='15' y2='40' stroke='black' stroke-width='2'/>
-      <line x1='15' y1='22' x2='5' y2='30' stroke='black' stroke-width='2'/>
-      <line x1='15' y1='22' x2='25' y2='30' stroke='black' stroke-width='2'/>
-      <line x1='15' y1='40' x2='5' y2='55' stroke='black' stroke-width='2'/>
-      <line x1='15' y1='40' x2='25' y2='55' stroke='black' stroke-width='2'/>
-    </svg>", stickman_width, stickman_height)
+    <circle cx='15' cy='10' r='5' stroke='black' stroke-width='2' fill='none'/>
+    <line x1='15' y1='15' x2='15' y2='40' stroke='black' stroke-width='2'/>
+    <line x1='15' y1='22' x2='5' y2='30' stroke='black' stroke-width='2'/>
+    <line x1='15' y1='22' x2='25' y2='30' stroke='black' stroke-width='2'/>
+    <line x1='15' y1='40' x2='5' y2='55' stroke='black' stroke-width='2'/>
+    <line x1='15' y1='40' x2='25' y2='55' stroke='black' stroke-width='2'/>
+  </svg>", stickman_width, stickman_height)
     
     stickmen <- paste(rep(stickman_svg, input$no_people), collapse = " ")
-    grid_container <- sprintf("<div style='display: grid; grid-template-columns: repeat(%d, 1fr); grid-template-rows: repeat(%d, 1fr); gap: 2px;'>%s</div>", cols, rows, stickmen)
+    grid_container <- sprintf(
+      "<div style='display: grid; grid-template-columns: repeat(%d, 1fr); grid-template-rows: repeat(%d, 1fr); gap: 2px;'>%s</div>",
+      cols, rows, stickmen
+    )
+    
     HTML(grid_container)
   })
+  
   
   #Pop-up box to confirm response
   observeEvent(input$submit, {
