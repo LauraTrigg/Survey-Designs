@@ -24,7 +24,7 @@ library(sortable)
 
   
   healthstate <- list(
-    1, 1, 0.2, 0.6, 0.8
+    0.6, 1, 0.2, 0.6, 0.8
   )
   # 0.601, 0.408, 0.408, 0.198, 0.601, 0.408, 0.8,0.8, 0.965, 0.965, 0.601, 0.198, 0.965, 0.601, 0.8, 0.965, 0.408, 0.8, 0.965, 0.8, 0.601, 0.198, 0.408, 0.198, 0.8, 0.198, 0.408
   
@@ -259,17 +259,16 @@ server <- function(input, output, session) {
     else if (page() == 3) {
       tagList(
         # Centered Title Panel
-        div(class = "content-section", 
-            style = "text-align: center; font-weight: bold; font-size: 32px; color: #333; margin-bottom: 10px;",
-            "Example"
+        div(style = "text-align: center; max-width: 800px; margin: auto;",
+            h2("Example")
         ),
         
         # Instructions
         div(class = "content-section", 
-            style = "text-align: center; font-size: 16px; margin-bottom: 8px; padding: 6px; background-color: #f8f9fa; border-radius: 4px;",
+            style = "text-align: center; font-size: 16px; margin-bottom: 8px; padding: 6px; border-radius: 4px;",
             p("Here’s a quick example to show how the survey works."),
             p("You’ll see two treatment options. In this example, Option A means 20 people live for 5 more years each. Option B means 10 people live for 10 more years each."),
-            p("The chart below shows how long each person lives under each option.")
+            p("The diagram below shows how long each person lives for each option.")
         ),
         
         # Health State Visual
@@ -277,8 +276,9 @@ server <- function(input, output, session) {
             div(style = "flex: 1; display: flex; justify-content: center;",
                 uiOutput("healthstate_heart")
             ),
-            div(style = "flex: 10; text-align: center; font-size: 16px; background-color: #eef7ff; padding: 6px 8px; border-radius: 6px; margin-left: 6px;",
-                p("Health is shown on a scale from 0 to 100%."),
+            div(style = "flex: 10; text-align: center; font-size: 16px; padding: 6px 8px; border-radius: 6px; margin-left: 6px;",
+                p("Imagine that the health of the patients can be represented by a percentage. 100% is fully healthy, and 0% is dead.
+                  The shape on the left shows this. The filled part of the shape shows how healthy the patients are."),
                 p(paste("In this example, all patients have a health score of", healthstate[[survey_page()]] * 100, "%."))
             )
         ),
@@ -308,14 +308,13 @@ server <- function(input, output, session) {
     #Example page 2
     else if (page() == 4) {
       tagList(
-        div(class = "content-section", 
-            style = "text-align: center; font-weight: bold; font-size: 32px; color: #333; margin-bottom: 10px;",
-            "Example"
+        div(style = "text-align: center; max-width: 800px; margin: auto;",
+            h2("Example")
         ),
         
         # Instructions
         div(class = "content-section", 
-            style = "text-align: center; font-size: 16px; margin-bottom: 8px; padding: 6px; background-color: #f8f9fa; border-radius: 4px;",
+            style = "text-align: center; font-size: 16px; margin-bottom: 8px; padding: 6px; border-radius: 4px;",
             p("Now use the slider below to adjust how many people should be treated in Option B to make it equally valuable to Option A."),
             p("The stick figures show how many people benefit from the treatment.")
         ),
@@ -325,7 +324,7 @@ server <- function(input, output, session) {
             div(style = "flex: 1; display: flex; justify-content: center;",
                 uiOutput("healthstate_heart")
             ),
-            div(style = "flex: 10; text-align: center; font-size: 16px; background-color: #eef7ff; padding: 6px 8px; border-radius: 6px; margin-left: 6px;",
+            div(style = "flex: 10; text-align: center; font-size: 16px; padding: 6px 8px; border-radius: 6px; margin-left: 6px;",
                 p("Health is shown on a scale from 0 to 100%."),
                 p(paste("In this example, all patients have a health score of", healthstate[[survey_page()]] * 100,"%."))
             )
@@ -354,7 +353,7 @@ server <- function(input, output, session) {
         
         # Slider Input
         div(class = "content-section", style = "text-align: center; margin-bottom: 10px;",
-            sliderInput("no_people", "Number of People Benefiting from Option B", 
+            sliderInput("no_people", "Move the slider to pick how many people should get Option B so it's just as good as Option A.", 
                         min = 0, max = 20, value = 10, width = "100%")
         ),
         
@@ -378,7 +377,7 @@ server <- function(input, output, session) {
         # Instruction Section
         div(class = "content-section", 
             style = "text-align: center; font-size: 16px; margin-bottom: 3px; 
-            padding: 8px; background-color: #f8f9fa; border-radius: 4px;",
+            padding: 8px; border-radius: 4px;",
             p("All patients are aged 20. Please use the sliding scale to select 
             how many people should receive 10 years for Programme B to be equally valuable as 
             Programme A.")),  
@@ -388,15 +387,15 @@ server <- function(input, output, session) {
             div(style = "flex: 1; display: flex; justify-content: center;",
                 uiOutput("healthstate_heart")
             ),
-            div(style = "flex: 10; text-align: center; font-size: 16px; background-color: #eef7ff; padding: 6px 8px; border-radius: 6px; margin-left: 6px;",
-                p("Health is shown on a scale from 0 to 100."),
+            div(style = "flex: 10; text-align: center; font-size: 16px; padding: 6px 8px; border-radius: 6px; margin-left: 6px;",
+                p("Health is shown on a scale from 0 to 100%."),
                 p(paste("All patients have a health score of", healthstate[[survey_page()]] * 100, "%."))
             )
         ),
         
         # Bar Chart Section
         div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 15px;",
-            plotOutput('plot', height = "250px", width = "100%")),  # Reduced height
+            plotOutput('plot', height = "250px", width = "100%")),
         
         # Side-by-side Option A and B Descriptions
         div(class = "content-section", 
@@ -417,7 +416,7 @@ server <- function(input, output, session) {
         
         # Slider Input
         div(class = "content-section", style = "text-align: center; margin-bottom: 20px;",
-            sliderInput("no_people", "Number of People Benefiting from Option B", 
+            sliderInput("no_people", "Move the slider to pick how many people should get Option B so it's just as good as Option A.", 
                         min = 0, max = 20, value = 10, width = "100%")),
         
         # Submit Button
@@ -490,25 +489,25 @@ server <- function(input, output, session) {
       Gains = c(optionA$gains[[survey_page()]], 10)  # Option B always has 10 years
     )
     
-    # Find the max y-axis limit (adding a small buffer for visibility)
+    # Find the max y-axis limit
     max_y <- max(data$Gains) + 1  # Ensures labels are fully visible
     
     # Generate the improved bar chart
     ggplot(data, aes(x = Option, y = Gains, fill = Option)) +
       geom_bar(stat = "identity", width = 0.6, show.legend = FALSE) +  
-      geom_text(aes(label = Gains), vjust = -0.3, size = 6, fontface = "bold") +  
-      scale_fill_manual(values = c("peachpuff", "darkseagreen")) +  # Custom colors
+      geom_text(aes(label = Gains), vjust = -0.3, size = 6) +  
+      scale_fill_manual(values = c("peachpuff", "darkseagreen")) + 
       scale_y_continuous(breaks = seq(0, max_y, by = 1), limits = c(0, max_y)) +  
       labs(title = "Extra years per patient", 
-           x = "", 
+           x = "",  
            y = "") +
-      theme_minimal(base_size = 14) +  # Cleaner look
+      theme_minimal(base_size = 14) + 
       theme(
         plot.title = element_text(hjust = 0.5, face = "bold"),  # Center title
         axis.text.x = element_text(face = "bold", size = 18),
         axis.text.y = element_blank(), #element_text(face = "bold", size = 13),
         panel.grid = element_blank(),  # Remove all gridlines
-        panel.background = element_rect(fill = "white", color = NA)  # White background
+        panel.background = element_rect(fill = "white", color = NA) 
       )
   })
 
