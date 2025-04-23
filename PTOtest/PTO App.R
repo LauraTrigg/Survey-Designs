@@ -260,7 +260,7 @@ server <- function(input, output, session) {
       tagList(
         # Centered Title Panel
         div(style = "text-align: center; max-width: 800px; margin: auto;",
-            h2("Example")
+            h2("Example"),
         ),
         
         # Instructions
@@ -293,9 +293,12 @@ server <- function(input, output, session) {
             div(class = "option-box", style = "background-color: peachpuff;", 
                 strong("Option A"), br(), uiOutput("discription_of_option_A")
             ),
-            div(class = "option-box", style = "background-color: darkseagreen;", 
-                strong("Option B"), br(), p("10 people will gain 10 years of life each")
+            div(class = "option-box", style = "background-color: darkseagreen; padding: 10px;", 
+                strong("Option B"), br(),
+                div(style = "text-align: center; font-size: 16px; margin-top: 10px;",
+                    "10 people will gain 10 years of life each")
             )
+            
         ),
         
         # Navigation Buttons
@@ -309,12 +312,12 @@ server <- function(input, output, session) {
     else if (page() == 4) {
       tagList(
         div(style = "text-align: center; max-width: 800px; margin: auto;",
-            h2("Example")
+            h2("Example"),
         ),
         
         # Instructions
         div(class = "content-section", 
-            style = "text-align: center; font-size: 16px; margin-bottom: 8px; padding: 6px; border-radius: 4px;",
+            style = "text-align: center; font-size: 16px; margin-bottom: 0px; padding: 1px; border-radius: 4px;",
             p("Now use the slider below to adjust how many people should be treated in Option B to make it equally valuable to Option A."),
             p("The stick figures show how many people benefit from the treatment.")
         ),
@@ -340,9 +343,12 @@ server <- function(input, output, session) {
             div(class = "option-box", style = "background-color: peachpuff;", 
                 strong("Option A"), br(), uiOutput("discription_of_option_A")
             ),
-            div(class = "option-box", style = "background-color: darkseagreen;", 
-                strong("Option B"), br(), uiOutput("discription_of_option_B")
+            div(class = "option-box", style = "background-color: darkseagreen; padding: 10px;", 
+                strong("Option B"), br(),
+                div(style = "text-align: center; font-size: 16px; margin-top: 10px;",
+                    "10 people will gain 10 years of life each")
             )
+            
         ),
         
         # Stickmen Display
@@ -371,30 +377,31 @@ server <- function(input, output, session) {
       tagList(
         
         # Centered Title Panel
-        titlePanel(div(uiOutput("page_number"), class = "content-section", 
-                       )),
+        div(h1(uiOutput("page_number")),
+        ),
+
         
         # Instruction Section
         div(class = "content-section", 
             style = "text-align: center; font-size: 16px; margin-bottom: 3px; 
-            padding: 8px; border-radius: 4px;",
+            padding: 2px; border-radius: 4px;",
             p("All patients are aged 20. Please use the sliding scale to select 
             how many people should receive 10 years for Programme B to be equally valuable as 
             Programme A.")),  
         
-        # Health State + Scale
-        div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 10px;",
+        # Health State + Scale (less vertical space)
+        div(class = "content-section", style = "display: flex; align-items: center; margin-bottom: 6px;",
             div(style = "flex: 1; display: flex; justify-content: center;",
                 uiOutput("healthstate_heart")
             ),
-            div(style = "flex: 10; text-align: center; font-size: 16px; padding: 6px 8px; border-radius: 6px; margin-left: 6px;",
+            div(style = "flex: 10; text-align: center; font-size: 16px; padding: 4px 6px; border-radius: 6px; margin-left: 6px;",
                 p("Health is shown on a scale from 0 to 100%."),
                 p(paste("All patients have a health score of", healthstate[[survey_page()]] * 100, "%."))
             )
         ),
         
         # Bar Chart Section
-        div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 15px;",
+        div(class = "chart-container", style = "display: flex; justify-content: center; margin-bottom: 6px;",
             plotOutput('plot', height = "250px", width = "100%")),
         
         # Side-by-side Option A and B Descriptions
@@ -428,9 +435,10 @@ server <- function(input, output, session) {
   })
 
   output$page_number <- renderUI({
-    div(style = "text-align: center; font-size: 20px; font-weight: bold; margin-top: 10px;",
-        paste("Question", survey_page()))
-  }) 
+    h2(paste("Question", survey_page()),
+       style = "text-align: center; margin-top: 10px;")
+  })
+  
   
   #Picture for health state
   output$healthstate_heart <- renderUI({
