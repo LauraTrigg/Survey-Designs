@@ -123,6 +123,8 @@ server <- function(input, output, session) {
   survey_page <- reactiveVal(1)
   survey_complete <- reactiveVal(FALSE)
   endofsurvey <- reactiveVal(FALSE)
+  final_feedback <- reactiveVal(FALSE)
+  
   
   # Observers to update the page when buttons are clicked
   observeEvent(input$next1, { page(2) })
@@ -136,6 +138,64 @@ server <- function(input, output, session) {
   
   # UI for all pages
   output$page_content <- renderUI({
+    
+    #Feedback questions page
+    if (survey_complete() && final_feedback()) {
+      return(tagList(
+        div(style = "max-width: 800px; margin: 40px auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #f9f9f9;",
+            h2("📝 A Few Final Questions", style = "text-align: center; margin-bottom: 30px;"),
+            
+            p("Thanks for completing the ranking! We’d love to hear how you found the questions.",
+              style = "font-size: 18px; text-align: center; margin-bottom: 30px;"),
+            
+            # Question 1
+            div(style = "margin-bottom: 25px;",
+                h4("1. How easy or difficult was it to understand what each question was asking?"),
+                selectInput("difficulty_rating", label = NULL,
+                            choices = c(
+                              "Very easy – I always understood what the question was asking",
+                              "Mostly clear – I understood most of it, with a few confusing parts",
+                              "A bit confusing – I sometimes forgot I was supposed to make A and B feel equal",
+                              "Hard to understand – I was often unsure what the question meant",
+                              "Very confusing – I didn’t understand what I was supposed to do"), width = "100%"),
+                textAreaInput("difficulty_explanation", "Optional: Can you explain your answer?", "", rows = 3, width = "100%")
+            ),
+            
+            # Question 2
+            div(style = "margin-bottom: 25px;",
+                h4("2. Did you find the questions difficult to answer?"),
+                selectInput("hard_answer", label = NULL,
+                            choices = c(
+                              "It was easy – I added up total years of life each time",
+                              "It was easy – I balanced the number of people and the life each person gained",
+                              "It was tricky – I found it hard to choose between saving more people vs giving more life",
+                              "It was tricky – I kept forgetting I was supposed to make A and B feel equal",
+                              "It was hard – I found it difficult to imagine what the answer should look like",
+                              "It was hard – I didn’t really understand what I was meant to do"), width = 
+                              "100%"),
+                textAreaInput("hard_answer_explanation", "Optional: Can you explain how you made your choices?", "", rows = 3, width = "100%")
+            ),
+            
+            # Question 3
+            div(style = "margin-bottom: 25px;",
+                h4("3. Did the health level (the coloured bar) affect how you answered?"),
+                selectInput("QoL", label = NULL,
+                            choices = c(
+                              "Yes – It influenced my answer a lot",
+                              "Yes – It influenced my answer a little",
+                              "Not really – I mostly focused on life expectancy",
+                              "No – I forgot the health levels were different",
+                              "I didn’t understand what the health level meant"), width = "100%"),
+                textAreaInput("QoL_explanation", "Optional: Can you explain how health level affected your decisions?", "", rows = 3, width = "100%")
+            ),
+            
+            div(style = "text-align: center;",
+                actionButton("submit_feedback", "Submit Feedback", class = "btn btn-success",
+                             style = "font-size: 16px; padding: 10px 25px; margin-top: 10px;")
+            )
+        )
+      ))
+    }
     
     # Ranking task page after main survey
     if (survey_complete() && !endofsurvey()) {
@@ -171,8 +231,7 @@ server <- function(input, output, session) {
         )
       ))
     }
-    
-    # Final thank you page after ranking is submitted
+    # Final thank you page
     if (survey_complete() && endofsurvey()) {
       return(tagList(
         div(style = "text-align: center; max-width: 800px; margin: auto; margin-top: 50px;",
@@ -184,7 +243,6 @@ server <- function(input, output, session) {
         )
       ))
     }
-    
     #Introduction page 1 
     if (page() == 1) {
       tagList(
@@ -290,7 +348,7 @@ server <- function(input, output, session) {
         
         # Option Descriptions
         div(class = "content-section", style = "display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 10px;",
-            div(class = "option-box", style = "background-color: peachpuff;", 
+            div(class = "option-box", style = "background-color: peachpuff;",      
                 strong("Option A"), br(), uiOutput("discription_of_option_A")
             ),
             div(class = "option-box", style = "background-color: darkseagreen; padding: 10px;", 
@@ -432,13 +490,13 @@ server <- function(input, output, session) {
                          style = "padding: 10px 25px; font-size: 16px;"))
       )
     }
+    
+    
   })
-
   output$page_number <- renderUI({
     h2(paste("Question", survey_page()),
        style = "text-align: center; margin-top: 10px;")
   })
-  
   
   #Picture for health state
   output$healthstate_heart <- renderUI({
@@ -587,7 +645,6 @@ server <- function(input, output, session) {
     HTML(grid_container)
   })
   
-  
   #Pop-up box to confirm response
   observeEvent(input$submit, {
     showModal(modalDialog(
@@ -609,12 +666,36 @@ server <- function(input, output, session) {
   # Action when "Yes, Continue" is clicked
   observeEvent(input$yes_continue, {
     total_questions <- length(optionA$gains)
-    if (survey_page() < total_questions) {
-      # Not the last question: process response & go to next
+    
+    # If it's question 2 or 8, show follow-up modal
+    if (survey_page() %in% c(2, 8)) {
+      removeModal()
+      showModal(modalDialog(
+        title = "Tell us more",
+        tagList(
+          p("Why did you select this number of people to recieve Option B?"),
+          selectInput("reason_dropdown", "Pick the  main reason:",
+                      choices = c("", 
+                                  "Because the extra life expectancy should be given to more people, even if each person gets less",
+                                  "Because the additional life expectancy is very small so its better to give less people more health",
+                                  "Reason C",
+                                  "Reason D",
+                                  "I dont want to say"), width = "100%"),
+          textAreaInput("reason_text", "Optional: Tell us more", "", rows = 3, width = "100%")
+        ),
+        footer = tagList(
+          actionButton("submit_reason", "Submit"),
+          modalButton("Cancel")
+        )
+      ))
+      
+    } 
+    else if (survey_page() < total_questions) {
       survey_page(survey_page() + 1)
+      updateSliderInput(session, "no_people", value = 10)
       removeModal()
       showNotification("You have confirmed your response")
-      updateSliderInput(session, "no_people", value = 1)
+      
     } else if (survey_page() == total_questions) {
       removeModal()
       showNotification("Final response recorded. Thank you!")
@@ -622,10 +703,34 @@ server <- function(input, output, session) {
     }
   })
   
+  # Action when "Submit" in follow-up modal is clicked
+  observeEvent(input$submit_reason, {
+    total_questions <- length(optionA$gains)
+    
+    if (survey_page() < total_questions) {
+      survey_page(survey_page() + 1)
+      updateSliderInput(session, "no_people", value = 10)
+    } else {
+      survey_complete(TRUE)
+    }
+    
+    removeModal()
+    showNotification("You have confirmed your response")
+  })
+  
   #Action when 'Submit Ranking' is clicked
   observeEvent(input$submit_ranking, {
-    endofsurvey(TRUE)
+    final_feedback(TRUE)
   })
+  
+  #Final Page
+  observeEvent(input$submit_feedback, {
+    final_feedback(FALSE)
+    endofsurvey(TRUE)
+    showNotification("Thank you for your feedback!")
+  })
+  
+  
   
   }
 
