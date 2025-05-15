@@ -3,6 +3,9 @@
 library(sortable)
 #setting up the variables 
 
+#testing in the right branch of github
+
+
 #If splitting into two blocks, have a variable that is optionA_block_A, and 
 #optionB_block_B to assign to optionA/health state to show the different questions 
 #to different blocks of participants. 
