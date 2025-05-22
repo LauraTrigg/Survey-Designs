@@ -1,9 +1,32 @@
 #Connecting to shinyapps.io 
 #install.packages('rsconnect')
 library(sortable)
+library(httr)
+library(jsonlite)
 #setting up the variables 
 
-#testing in the right branch of github
+#setting up supabase
+
+supabase_url <- placeholderurl.org
+supabase_key <- placeholderkey
+save_to_supabase <- function(data, table, url, key) {
+  res <- httr::POST(
+    url = paste0(url, "/rest/v1/", table),
+    httr::add_headers(
+      "apikey" = key,
+      "Authorization" = paste("Bearer", key),
+      "Content-Type" = "application/json",
+      "Prefer" = "return=minimal"
+    ),
+    body = jsonlite::toJSON(data, auto_unbox = TRUE)
+  )
+  
+  if (res$status_code >= 200 && res$status_code < 300) {
+    message("✅ Data saved successfully.")
+  } else {
+    warning("⚠️ Failed to save data: ", httr::content(res, as = "text"))
+  }
+}
 
 
 #If splitting into two blocks, have a variable that is optionA_block_A, and 
@@ -15,10 +38,12 @@ library(sortable)
   #Input Lists
   #Full list
   optionA <- list(
-    gains = c(5, 10, 2, 2, 20),
-    #20, 1, 1, 5, 0.5, 5, 0.75, 0.75, 0.5, 0.5, 2, 5, 5, 2, 20, 0.5, 1, 0.75, 0.5, 0.75, 2, 20, 1, 20, 0.75, 5, 1
-    people = c(20, 10, 50, 50, 5)
-    #5, 100, 100, 20, 200, 20, 150, 150, 200, 200, 50, 20, 200, 50, 5, 200, 100, 150, 200, 150, 50, 5, 100, 5, 150, 20, 100
+    gains = c(5, 10, 2),
+    #2, 20, 20, 1, 1, 5, 0.5, 5, 0.75, 0.75, 0.5, 0.5, 2, 5, 5, 2, 20, 0.5, 1, 0.75, 0.5, 0.75, 2, 20, 1, 20, 0.75, 5, 1
+
+    people = c(20, 10, 50)
+    #50, 5, 5, 100, 100, 20, 200, 20, 150, 150, 200, 200, 50, 20, 200, 50, 5, 200, 100, 150, 200, 150, 50, 5, 100, 5, 150, 20, 100
+  
   )
   
   healthstatedescriptor <- list(
@@ -27,11 +52,10 @@ library(sortable)
 
   
   healthstate <- list(
-    0.6, 1, 0.2, 0.6, 0.8
-  )
-  # 0.601, 0.408, 0.408, 0.198, 0.601, 0.408, 0.8,0.8, 0.965, 0.965, 0.601, 0.198, 0.965, 0.601, 0.8, 0.965, 0.408, 0.8, 0.965, 0.8, 0.601, 0.198, 0.408, 0.198, 0.8, 0.198, 0.408
-  
-} #longlist 
+    0.6, 1, 0.2)
+   #, 0.6, 0.8, 0.6, 0.4, 0.4, 0.2, 0.6, 0.4, 0.8, 0.8, 1, 1, 1, 0.2, 1, 0.6, 0.8, 1, 0.4, 0.8, 1, 0.8, 0.6, 0.2, 0.4, 0.2, 0.8, 0.2, 0.4
+
+  } 
 
 library(shiny)
 
@@ -127,7 +151,7 @@ server <- function(input, output, session) {
   survey_complete <- reactiveVal(FALSE)
   endofsurvey <- reactiveVal(FALSE)
   final_feedback <- reactiveVal(FALSE)
-  
+
   
   # Observers to update the page when buttons are clicked
   observeEvent(input$next1, { page(2) })
@@ -239,7 +263,7 @@ server <- function(input, output, session) {
       return(tagList(
         div(style = "text-align: center; max-width: 800px; margin: auto; margin-top: 50px;",
             h2("✅ All Done!"),
-            p("Thanks again — your ranking has been submitted.",
+            p("Thanks again — your responses have been submitted.",
               style = "font-size: 18px; margin-top: 20px;"),
             p("You may now close this window.",
               style = "font-size: 16px; margin-top: 10px; font-style: italic;")
@@ -254,13 +278,16 @@ server <- function(input, output, session) {
             p("In this survey, you will help decide how to give out a life-saving treatment.",
               style = "font-size: 20px; margin-top: 20px;"),
             
-            p("Each question gives you two choices: Option A and Option B.",
+            p("Each question shows two treatment options: Option A and Option B.",
               style = "font-size: 20px; margin-top: 20px;"),
             
             p("Option A shows how many people get the treatment and how many extra years they will live.",
               style = "font-size: 20px; margin-top: 20px;"),
             
-            p("In Option B, everyone who gets the treatment lives 10 more years. Anyone who doesn’t get it will die right away.",
+            p("In Option B, anyone who gets the treatment will live for 10 more years.",
+              style = "font-size: 20px; margin-top: 20px;"),
+            
+            p("Anyone who doesn’t get it will die right away.",
               style = "font-size: 20px; margin-top: 20px;"),
             
             p("Your job is to choose how many people should get the treatment in Option B so that both options feel equally fair or valuable.",
@@ -670,20 +697,38 @@ server <- function(input, output, session) {
   observeEvent(input$yes_continue, {
     total_questions <- length(optionA$gains)
     
+    # Generate participant ID if not already set
+    if (is.null(session$userData$participant_id)) {
+      session$userData$participant_id <- paste0("p_", as.integer(Sys.time()))
+    }
+    
+    # Save main response to Supabase
+    data_to_save <- list(
+      participant_id = session$userData$participant_id,
+      question_number = survey_page(),
+      option_a_people = optionA$people[[survey_page()]],
+      option_a_gains = optionA$gains[[survey_page()]],
+      option_b_people = input$no_people,
+      HRQoL = healthstate[[survey_page()]],
+      timestamp = format(Sys.time(), "%Y-%m-%d %H:%M:%S")
+    )
+    
+    save_to_supabase(data_to_save, supabase_table, supabase_url, supabase_key)
+    
     # If it's question 2 or 8, show follow-up modal
     if (survey_page() %in% c(2, 8)) {
       removeModal()
       showModal(modalDialog(
         title = "Tell us more",
         tagList(
-          p("Why did you select this number of people to recieve Option B?"),
-          selectInput("reason_dropdown", "Pick the  main reason:",
+          p("Why did you select this number of people to receive Option B?"),
+          selectInput("reason_dropdown", "Pick the main reason:",
                       choices = c("", 
                                   "Because the extra life expectancy should be given to more people, even if each person gets less",
-                                  "Because the additional life expectancy is very small so its better to give less people more health",
+                                  "Because the additional life expectancy is very small so it's better to give fewer people more health",
                                   "Reason C",
                                   "Reason D",
-                                  "I dont want to say"), width = "100%"),
+                                  "I don't want to say"), width = "100%"),
           textAreaInput("reason_text", "Optional: Tell us more", "", rows = 3, width = "100%")
         ),
         footer = tagList(
@@ -691,25 +736,52 @@ server <- function(input, output, session) {
           modalButton("Cancel")
         )
       ))
-      
-    } 
-    else if (survey_page() < total_questions) {
-      survey_page(survey_page() + 1)
-      updateSliderInput(session, "no_people", value = 10)
-      removeModal()
-      showNotification("You have confirmed your response")
-      
-    } else if (survey_page() == total_questions) {
-      removeModal()
-      showNotification("Final response recorded. Thank you!")
-      survey_complete(TRUE)
+    } else {
+      # Continue to next question
+      if (survey_page() < total_questions) {
+        survey_page(survey_page() + 1)
+        updateSliderInput(session, "no_people", value = 10)
+        removeModal()
+        showNotification("You have confirmed your response")
+      } else {
+        removeModal()
+        showNotification("Final response recorded. Thank you!")
+        survey_complete(TRUE)
+      }
     }
   })
   
-  # Action when "Submit" in follow-up modal is clicked
+  # Save rationale when modal is submitted
   observeEvent(input$submit_reason, {
-    total_questions <- length(optionA$gains)
+    rationale_data <- list(
+      rationale_dropdown = input$reason_dropdown,
+      rationale_text = input$reason_text
+    )
     
+    # Use PATCH to update the same row by filtering on participant_id and question_number
+url <- paste0(supabase_url, "/rest/v1/", supabase_table, 
+                  "?participant_id=eq.", session$userData$participant_id,
+                  "&question_number=eq.", survey_page())
+
+    res <- httr::PATCH(
+      url = url,
+      add_headers(
+        "apikey" = supabase_key,
+        "Authorization" = paste("Bearer", supabase_key),
+        "Content-Type" = "application/json",
+        "Prefer" = "return=minimal"
+      ),
+      body = jsonlite::toJSON(rationale_data, auto_unbox = TRUE)
+    )
+    
+    if (res$status_code >= 200 && res$status_code < 300) {
+      message("✅ Rationale updated successfully.")
+    } else {
+      warning("⚠️ Failed to update rationale: ", httr::content(res, as = "text"))
+    }
+    
+    # Continue to next question
+    total_questions <- length(optionA$gains)
     if (survey_page() < total_questions) {
       survey_page(survey_page() + 1)
       updateSliderInput(session, "no_people", value = 10)
@@ -720,18 +792,55 @@ server <- function(input, output, session) {
     removeModal()
     showNotification("You have confirmed your response")
   })
-  
-  #Action when 'Submit Ranking' is clicked
+
+  #Action when submit ranking is pressed
+  ranking_table <- "PTO_rankings"
   observeEvent(input$submit_ranking, {
     final_feedback(TRUE)
+    
+    ranking <- input$ranking_result
+    participant_id <- session$userData$participant_id
+    
+    ranking_data <- list(
+      participant_id = participant_id,
+      rank_1 = ranking[1],
+      rank_2 = ranking[2],
+      rank_3 = ranking[3],
+      rank_4 = ranking[4],
+      rank_5 = ranking[5],
+      rank_6 = ranking[6],
+      rank_7 = ranking[7],
+      timestamp = format(Sys.time(), "%Y-%m-%d %H:%M:%S")
+    )
+    
+    # Save to PTO_rankings table
+    save_to_supabase(ranking_data, ranking_table, supabase_url, supabase_key)
   })
   
+  
+  
   #Final Page
+  feedback_table <- "PTO_feedback"
+  
   observeEvent(input$submit_feedback, {
     final_feedback(FALSE)
     endofsurvey(TRUE)
     showNotification("Thank you for your feedback!")
+    
+    feedback_data <- list(
+      participant_id = session$userData$participant_id,
+      difficulty_rating = input$difficulty_rating,
+      difficulty_explanation = input$difficulty_explanation,
+      hard_answer = input$hard_answer,
+      hard_answer_explanation = input$hard_answer_explanation,
+      QoL = input$QoL,
+      QoL_explanation = input$QoL_explanation,
+      timestamp = format(Sys.time(), "%Y-%m-%d %H:%M:%S")
+    )
+    
+    save_to_supabase(feedback_data, feedback_table, supabase_url, supabase_key)
   })
+  
   
   
   
